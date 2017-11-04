@@ -1,0 +1,55 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <div class="row">
+        <h1 style="text-align: center;"> Ändere <%= event.title%></h1>
+        <div style="width: 30%; margin: 25px auto;">
+            <form  action="/events/<%= event._id %>?_method=PUT" method="POST">
+                <div class="form-group">
+                    <label>Titel</label>
+                    <input class="form-control" type="text" name="event[title]" value="<%= event.title%>">
+                </div>
+                <div class="form-group">
+                    <label>Bild</label>
+                    <input class="form-control" type="text" name="event[image]" value="<%=event.image%>">
+                </div>
+                <div class="form-group">
+                    <label>Beschreibung</label>
+                    <p>
+                        <textarea name="event[description]"><%=event.description%></textarea>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label>Ort</label>
+                    <input class="form-control" type="text" name="event[place]"  value="<%=event.place%>">
+                </div>
+                <div class="form-group">
+                    <label>Treffpunkt</label>
+                    <input class="form-control" type="text" name="event[meetingpoint]"  value="<%=event.meetingpoint%>">
+                </div>
+                <div class="form-group">
+                    <label>Datum</label>
+                    <input class="form-control" type="date" name="event[dat]e"  value="<%=event.date%>">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="time" name="event[time]" value="<%=event.time%>">
+                </div>
+                <div class="form-group">
+                    <label>Anmeldeschluss</label>
+                    <input class="form-control" type="date" name="event[deadline]"  value="<%=event.deadline%>">
+                </div>
+                <div class="form-group">
+                    <label>Bearbeitungsgebühr [€]</label>
+                    <input class="form-control" type="number" name="event[fee]"  min="0.00" step ="0.1" value="<%=event.fee%>">
+                </div>
+                <div class="form-group">
+                   <button class="btn btn-lg btn-primary btn-block">Änderung Speichern</button>
+                </div>
+            </form>
+            <a href="/events">Zurück</a>
+        </div>
+        
+    </div>
+
+</div>
+<% include ../partials/footer %>
