@@ -1,29 +1,45 @@
 <% include ../partials/header %>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <h1>Profil von <%= user.username%></h1>
+    </div>
+    <div class="col-md-4">
         <div class="thumbnail">
             <img src="<%= user.avatar%>" alt="Avatar von <%= user.username%>">
+            <hr>
             <div class="caption">
+                <p><%= user.firstname%> <%= user.lastname %>
+                <% if(user.isAdmin) { %>
+                <em>(Administrator)</em>
+                <% } %>
+                </p>
+                
+                <p><%= user.streetAndNumber%><br><%= user.zipcode%> <%= user.city%></p>
                 <a href="mailto: <%= user.email%>"><%= user.email%></a>
-            </div>
+                <p><%= user.telephone%></p>
+                <p><em>Mitglied seit <%= moment(user.created).format('DD. MMM YYYY') %></em></p>
+                <% if(currentUser && user._id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
+                    <a class="btn btn-xs btn-warning" href="/users/<%=user._id%>/edit">Bearbeiten</a>
+                    <form class="delete-form" action="/users/<%=user._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-xs btn-danger">Profil löschen</button>
+                    </form>
+                 <% } %>   
+             </div>
         </div>
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-        voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet 
-        clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit 
-        amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
-        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, 
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-        Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-    </div>
+        <div class="thumbnail">
+             
+        </div>
+    </div> 
     <div class="col-md-8">
-    <h3><%= user.username%>'s Veranstaltungen:</h3>
-    <ul>
-    <% events.forEach(function(event) { %>
-        <li><a href="/events/<%= event.id %>"><%= event.title %> am <%= event.date %></a></li>
-     <% });%> 
-    </ul>
+        <div class="well">
+            <h3><%= user.username%>'s Veranstaltungen:</h3>
+            <hr>
+            <ul>
+            <% events.forEach(function(event) { %>
+                <li><a href="/events/<%= event.id %>"><%= event.title %> am <%= event.date %></a></li>
+             <% });%> 
+            </ul>
+        </div>
     </div>
 </div>
 

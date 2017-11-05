@@ -40,4 +40,39 @@ router.get("/:id", middleware.isLoggedIn, function(req, res) {
    
 });
 
+//EDIT - edit an existing users
+router.get("/:id/edit", middleware.checkUserOwnership, function(req, res) {
+    User.findById(req.params.id, function(err, foundUser){
+        res.render("users/edit", {user: foundUser });
+    });
+});
+
+//UPDATE - Update info
+router.put("/:id",middleware.checkUserOwnership, function(req, res){
+    User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
+        if (err || !updatedUser) {
+            req.flash("error","Mitglied nicht gefunden!");
+            res.redirect("back");        
+        } else {
+            res.redirect("/users/" + req.params.id);
+        }
+        
+    });
+});
+
+
+//DELETE ROUTE
+router.delete("/:id",middleware.checkUserOwnership, function(req, res){
+     User.findByIdAndRemove(req.params.id, function(err){  
+     if (err) {
+            console.log(err);
+            res.redirect("/users");
+        } else {
+            req.flash('success', 'Mitglied erfolgreich gelöscht!');
+            res.redirect("/users");
+            
+        }
+    });
+});
+
 module.exports = router;

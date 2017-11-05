@@ -30,7 +30,7 @@
                   <li class="<%= typeof page !== 'undefined' && page === 'login' ? 'active' : '' %>"><a href="/login">Einloggen</a></li>
                   <li class="<%= typeof page !== 'undefined' && page === 'register' ? 'active' : '' %>"><a href="/register">Regristrieren</a></li>
               <% } else { %>
-                  <li><a href="#">Eingeloggt als <%= currentUser.username %></a></li>
+                  <li><a href="/users/<%= currentUser._id %>">Eingeloggt als <%= currentUser.username %></a></li>
                   <li><a href="/logout">Ausloggen</a></li>
               <% } %>
           </ul>

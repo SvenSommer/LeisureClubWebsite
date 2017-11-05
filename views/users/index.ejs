@@ -16,13 +16,13 @@
             <% users.forEach(function(user){ %>
             <tr>
                 <td><a href="/users/<%= user._id %>"><%= user.username %></a></td>
-                <td><%= user.firstname %></td>
-                <td><%= user.lastname %></td>
-                <td><%= user.email %></td>
-                <td><%= user.telephone %></td>
+                <td><a href="/users/<%= user._id %>"><%= user.firstname %></a></td>
+                <td><a href="/users/<%= user._id %>"><%= user.lastname %></a></td>
+                <td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
+                <td><a href="/users/<%= user._id %>"><%= user.telephone %></a></td>
             </tr>
             <% }); %>
         </tbody>
   </table>
 
-<% include ../partials/footer %>node 
+<% include ../partials/footer %>

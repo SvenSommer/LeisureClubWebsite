@@ -112,9 +112,9 @@ router.put("/:id", middleware.checkEventOwnership, function(req,res){
         var lng = "";
         var location =req.body.location;
         if (data.results[0]) {
-                var lat = data.results[0].geometry.location.lat;
-                var lng = data.results[0].geometry.location.lng;
-                var location = data.results[0].formatted_address;
+            lat = data.results[0].geometry.location.lat;
+            lng = data.results[0].geometry.location.lng;
+            location = data.results[0].formatted_address;
         }
 
     var newData = 
@@ -154,6 +154,7 @@ router.delete("/:id",middleware.checkEventOwnership, function(req, res){
             console.log(err);
             res.redirect("/events");
         } else {
+            req.flash('success', 'Veranstaltung erfolgreich gelöscht!');
             res.redirect("/events");
         }
     });

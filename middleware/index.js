@@ -1,10 +1,12 @@
 //All the middleware is here!
-var Event = require("../models/event");
+var Event   = require("../models/event");
 var Comment = require("../models/comment");
+var User    = require("../models/user");
 
 
 var middlewareObj = {};
 
+//OWNS Event?
 middlewareObj.checkEventOwnership = function(req, res, next) {
         if (req.isAuthenticated()) {
             Event.findById(req.params.id, function(err, foundEvent){
@@ -28,7 +30,7 @@ middlewareObj.checkEventOwnership = function(req, res, next) {
         }
 };
 
-
+//OWNS Comment?
 middlewareObj.checkCommentOwnership = function(req, res, next) {
         if (req.isAuthenticated()) {
             Comment.findById(req.params.comment_id, function(err, foundComment){
@@ -52,8 +54,33 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
            res.redirect("back");
         }
 };
+
+//OWNS User?
+middlewareObj.checkUserOwnership = function(req, res, next) {
     
-//MIDDLEWARE
+        if (req.isAuthenticated()) {
+            User.findById(req.params.id, function(err, foundUser){
+                if (err || !foundUser) {
+                    req.flash("error", "Mitglied nicht gefunden!!!");
+                    res.redirect("back");
+                } else {
+                    //Does the user own the user?
+                    if (foundUser._id.equals(req.user._id) || req.user.isAdmin) {
+                       next();
+                    }
+                    else{
+                         req.flash("error", "Du nicht die erforderlichen Rechte das zu tun.");
+                         res.redirect("back");
+                    }
+                }
+            });
+        } else {
+           req.flash("error", "Du musst dich erst einloggen!");
+           res.redirect("back");
+        }
+};
+    
+//IS Logged in?
 middlewareObj.isLoggedIn = function isLoggedIn(req, res, next){
     if (req.isAuthenticated()) {
         return next();

@@ -12,10 +12,10 @@ var userSchema = new mongoose.Schema({
     username: {type: String, unique: true, required:true},
     password: String,
     avatar: String,
-    birthday: Date,
+    birthday: String,
     city: String,
-    street: String,
-    housenumber: String,
+    zipcode: Number,
+    streetAndNumber: String,
     telephone: String,
     created: {type: Date, default: Date.now},
     isAdmin: {type: Boolean, default: false}
