@@ -18,10 +18,10 @@ var commentRoutes = require("./routes/comments"),
     eventRoutes = require("./routes/events"),
     indexRoutes      = require("./routes/index")
     
-
+console.log("DatabaseUrl: " + process.env.DATABASEURL);
 //APP Config    
-//mongoose.connect("mongodb://localhost/freizeitverein", {useMongoClient: true});
-mongoose.connect("mongodb://mlab_user:mlab_userpassword@ds245885.mlab.com:45885/freizeitverein");
+mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
+//mongoose.connect("mongodb://mlab_user:mlab_userpassword@ds245885.mlab.com:45885/freizeitverein");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.set("view engine","ejs");
