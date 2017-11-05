@@ -20,7 +20,8 @@ var commentRoutes = require("./routes/comments"),
     
 
 //APP Config    
-mongoose.connect("mongodb://localhost/freizeitverein", {useMongoClient: true});
+//mongoose.connect("mongodb://localhost/freizeitverein", {useMongoClient: true});
+mongoose.connect("mongodb://mlab_user:mlab_userpassword@ds245885.mlab.com:45885/freizeitverein");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.set("view engine","ejs");
