@@ -108,9 +108,15 @@ router.put("/:id", middleware.checkEventOwnership, function(req,res){
     console.log("req.body.description:" +  req.body.description);
     console.log("req.body.location:" +  req.body.location);    
     geocoder.geocode(req.body.location, function (err, data) {
-    var lat = data.results[0].geometry.location.lat;
-    var lng = data.results[0].geometry.location.lng;
-    var location = data.results[0].formatted_address;
+        var lat = "";
+        var lng = "";
+        var location =req.body.location;
+        if (data.results[0]) {
+                var lat = data.results[0].geometry.location.lat;
+                var lng = data.results[0].geometry.location.lng;
+                var location = data.results[0].formatted_address;
+        }
+
     var newData = 
     {
         title: req.body.title, 
