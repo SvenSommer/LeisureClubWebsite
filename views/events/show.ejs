@@ -1,62 +1,90 @@
 <% include ../partials/header %>
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            <p class="lead">Freizeitverein</p>
-            <div class="listgroup">
-                <li class="list-group-item active">Beschreibung</li>
-                <li class="list-group-item ">Teilnehmer</li>
-                <li class="list-group-item ">Administration</li>
+<div class="row">
+    <div class="col-md-3">
+        <p class="lead">Freizeitverein</p>
+        <div class="listgroup">
+            <li class="list-group-item active">Beschreibung</li>
+            <li class="list-group-item ">Teilnehmer</li>
+            <li class="list-group-item ">Administration</li>
+        </div>
+        <div id="map"></div>
+    </div>
+    <div class="col-md-9">
+        <div class="thumbnail">
+            <img class="img-responsive" src="<%=event.image%>">
+            <div class="caption-full">
+                <h4 class="pull-right">am <%=event.date%> <em>(<%= moment(event.date).fromNow() %>)</em></h4>
+                <h4><a><%=event.title%></a></h4>
+                <p><%=event.description%></p>
+                <p><strong>Ort: </strong><%=event.location%></p>
+                <p><strong>Treffpunkt und Uhrzeit: </strong><%=event.meetingpoint%> um <strong><%=event.time%> Uhr</strong></p>
+                <p><strong>Anmeldeschluss: </strong><%=event.deadline%> <em>(<%= moment(event.deadline).fromNow() %>)</em></p>
+                <p><strong>Bearbeitungsgebühr: </strong><%=event.fee%> €</p>
+                <p><strong>Teilnehmer: </strong><%=event.subscribers%></p>
+                <p>
+                    <em>erstellt von <a href="/users/<%= event.author.id %>"><%=event.author.username%></a>, <%= moment(event.createdAt).fromNow() %></em>
+                </p>
+                <% if(currentUser && event.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
+                    <a class="btn btn-xs btn-warning" href="/events/<%=event._id%>/edit">Bearbeiten</a>
+                    <form class="delete-form" action="/events/<%=event._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-xs btn-danger">Veranstaltung löschen</button>
+                    </form>
+                 <% } %>    
+                <p><a href="/events">Zurück</a></p>
             </div>
         </div>
-        <div class="col-md-9">
-            <div class="thumbnail">
-                <img class="img-responsive" src="<%=event.image%>">
-                <div class="caption-full">
-                    <h4 class="pull-right">am <%=event.date%></h4>
-                    <h4><a><%=event.title%></a></h4>
-                    <p><%=event.description%></p>
-                    <p><strong>Ort: </strong><%=event.place%></p>
-                    <p><strong>Treffpunkt und Uhrzeit: </strong><%=event.meetingpoint%> um <strong><%=event.time%> Uhr</strong></p>
-                    <p><strong>Anmeldeschluss: </strong><%=event.deadline%></p>
-                    <p><strong>Bearbeitungsgebühr: </strong><%=event.fee%> €</p>
-                    <p><strong>Teilnehmer: </strong><%=event.subscribers%></p>
-                    <p><em>erstellt von <%=event.author.username%></em></p>
-                    <% if(currentUser && event.author.id.equals(currentUser._id)){%>
-                        <a class="btn btn-xs btn-warning" href="/events/<%=event._id%>/edit">Bearbeiten</a>
-                        <form class="delete-form" action="/events/<%=event._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-xs btn-danger">Veranstaltung löschen</button>
-                        </form>
-                     <% } %>    
-                    <p><a href="/events">Zurück</a></p>
-                </div>
+        <!-->Comments</!-->
+        <div class="well">
+            <div class="text-right">
+                <a class = "btn btn-success" href="/events/<%= event._id %>/comments/new">Kommentar schreiben</a>
             </div>
-            <!-->Comments</!-->
-            <div class="well">
-                <div class="text-right">
-                    <a class = "btn btn-success" href="/events/<%= event._id %>/comments/new">Kommentar schreiben</a>
-                </div>
-                <hr>
-                <% event.comments.forEach(function(comment){ %>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <strong><%= comment.author.username %></strong>
-                            <span class="pull-right"><%= comment.created %></span>
-                            <p>
-                                <%= comment.text %>
-                            </p>
-                            <% if(currentUser && comment.author.id.equals(currentUser._id)){%>
-                                <a class="btn btn-xs btn-warning" href="/events/<%= event._id %>/comments/<%= comment._id %>/edit">Bearbeiten</a>  
-                                <form class="delete-form" action="/events/<%= event._id %>/comments/<%= comment._id %>/?_method=DELETE" method="POST">
-                                    <button class="btn btn-xs btn-danger">Kommentar löschen</button>
-                                </form>
-                            <% } %>    
-                        </div>
+            <hr>
+            <% event.comments.forEach(function(comment){ %>
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong><%= comment.author.username %></strong>
+                        <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
+                        <p>
+                            <%= comment.text %>
+                        </p>
+                        <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
+                            <a class="btn btn-xs btn-warning" href="/events/<%= event._id %>/comments/<%= comment._id %>/edit">Bearbeiten</a>  
+                            <form class="delete-form" action="/events/<%= event._id %>/comments/<%= comment._id %>/?_method=DELETE" method="POST">
+                                <button class="btn btn-xs btn-danger">Kommentar löschen</button>
+                            </form>
+                        <% } %>    
                     </div>
-                <% })%>
-            </div>
+                </div>
+            <% })%>
         </div>
     </div>
 </div>
-
+<script>
+  function initMap() {
+    var lat = <%= event.lat %>;
+    var lng = <%= event.lng %>;
+    var center = {lat: lat, lng: lng };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: center,
+        scrollwheel: false
+    });
+    var contentString = `
+      <strong><%= event.name %><br />
+      <%= event.location %></strong>
+      <p><%= event.description %></p>
+    `
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtfpxFDfTMdbvPh9nbZTmQK5w2s2UP3AM&callback=initMap"></script>
 <% include ../partials/footer %>

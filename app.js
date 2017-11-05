@@ -6,22 +6,22 @@ var express             = require("express"),
     methodOverride      = require("method-override"),
     expressSanitizer    = require("express-sanitizer"),
     passport            = require("passport"),
+    moment              = require('moment'),
     LocalStrategy       = require("passport-local"),
-    User                = require("./models/user"),
-    Event               = require("./models/event"),
-    Comment             = require("./models/comment"),
-    seedDB              = require("./seeds");
+    User                = require("./models/user");
 
 
 
-var commentRoutes = require("./routes/comments"),
-    eventRoutes = require("./routes/events"),
-    indexRoutes      = require("./routes/index")
+var indexRoutes         = require("./routes/index"),
+    commentRoutes       = require("./routes/comments"),
+    eventRoutes         = require("./routes/events"),
+    usersRoutes         = require("./routes/users");
     
 console.log("DatabaseUrl: " + process.env.DATABASEURL);
 //APP Config    
-mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
-//mongoose.connect("mongodb://mlab_user:mlab_userpassword@ds245885.mlab.com:45885/freizeitverein");
+var url = process.env.DATABASEURL || "mongodb://localhost/freizeitverein";
+mongoose.connect(url, {useMongoClient: true});
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.set("view engine","ejs");
@@ -29,11 +29,12 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
 
-//seedDB(); //Seeding the database
-
+moment.locale("de");
+moment().format('LLL');
+app.locals.moment = moment;
 //PASSPOORT CINFIGURATION
 app.use(require("express-session")({
-    secret:"_MPhD8fCqBxOP`TLlF^wV\2pjliS^061BdvJOg%,zV77eV>WEdBFA2m/N0zz;5JO",
+    secret: process.env.PASSWORDSECRET,
     resave: false,
     saveUninitialized: false
     
@@ -43,6 +44,7 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+//local passport
 
 app.use(function(req, res, next){
    res.locals.currentUser = req.user;
@@ -55,6 +57,7 @@ app.use(function(req, res, next){
 app.use("/", indexRoutes);
 app.use("/events", eventRoutes);
 app.use("/events/:id/comments",commentRoutes);
+app.use("/users", usersRoutes);
 
 
 app.listen(process.env.PORT, process.env.IP, function(){

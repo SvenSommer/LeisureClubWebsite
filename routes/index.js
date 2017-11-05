@@ -2,6 +2,9 @@ var express = require("express");
 var router = express.Router();
 var passport =  require("passport");
 var User =  require("../models/user");
+var async = require("async");
+var nodemailer = require("nodemailer");
+var crypto = require("crypto");
 
 router.get("/", function(req, res){
    res.render("landing");
@@ -17,28 +20,43 @@ router.get("/", function(req, res){
 
 // SHOW REGISTER FORM
 router.get("/register", function(req, res) {
-    res.render("register");
+    res.render("register", {page: 'register'});
 });
 
 // HANDLE SIGNUP LOGIC
 router.post("/register",function(req, res) {
-    var newUser = new User({username : req.body.username});
+   // req.body.event.body = req.sanitize(req.body.event.body);
+    var newUser = new User({
+        username: req.body.username,
+        firstname:  req.body.firstname,
+        lastname:  req.body.lastname,
+        email:  req.body.email
+    });
+    if (req.body.passphrase === "Rauen") {
+        newUser.isAdmin = true;
+    }
+    else if (req.body.passphrase === "Sommerblume") {
+        newUser.isAdmin = false;
+    } else {
+        return res.render("register", {error: "Codeword nicht erkannt!"});   
+    }
+
     User.register(newUser, req.body.password, function(err, user){
-        if (err) {
+        if(err){
             console.log(err);
-            req.flash("error", err.message);
-            return res.render("register");
+            return res.render("register", {error: err.message});
         }
         passport.authenticate("local")(req, res, function(){
             req.flash("success", "Willkommen beim Freizeitverein " + user.username);
             res.redirect("/events");       
         });
     });
+    
 });
 
 // SHOW LOGIN FORM
 router.get("/login", function(req,res){
-   res.render("login"); 
+   res.render("login", {page: 'login'});
 });
 
 //HANDLING LOGIN LOGIC
@@ -57,6 +75,128 @@ router.get("/logout", function(req, res) {
     res.redirect("/events");
 });
 
+
+//================================================================================
+// Password reset Route
+//================================================================================
+// forgot password
+router.get('/forgot', function(req, res) {
+  res.render('forgot');
+});
+
+router.post('/forgot', function(req, res, next) {
+  async.waterfall([
+    function(done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function(token, done) {
+      User.findOne({ email: req.body.email }, function(err, user) {
+        if (!user) {
+          req.flash('error', 'Es existiert kein Account mit dieser Emailadresse');
+          return res.redirect('/forgot');
+        }
+
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        user.save(function(err) {
+          done(err, token, user);
+        });
+      });
+    },
+    function(token, user, done) {
+      var smtpTransport = nodemailer.createTransport({
+        service: 'Gmail', 
+        auth: {
+          user: 'freizeitverein.server@gmail.com',
+          pass: process.env.GMAILSERVERPW
+        }
+      });
+      var mailOptions = {
+        to: user.email,
+        from: 'freizeitverein.server@gmail.com',
+        subject: 'Freizeitverein: Passwort zurücksetzen',
+        text: 'Du erhälst diese Nachricht da du (oder jemand anderes) eine Anfrage zum Zurücksetzen des Passwortes verschickt hat.\n\n' +
+          'Bitte klicke auf den folgenden Link, oder kopiere in in deinen Browser um dein Passwort zurückzusetzen:\n\n' +
+          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+          'Falls du diese Anfrage nicht verschickt hast, ignoriere bitte diese Email und alles bleibt unverändert.\n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        console.log('mail sent. token: ' + token );
+        req.flash('success', 'Eine Email zur Wiederherstellung des Passwortes wurde an ' + user.email + ' versendet.');
+        done(err, 'done');
+      });
+    }
+  ], function(err) {
+    if (err) return next(err);
+    res.redirect('/forgot');
+  });
+});
+
+router.get('/reset/:token', function(req, res) {
+ // User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+  User.findOne({ resetPasswordToken: req.params.token}, function(err, user) {
+    if (!user) {
+      req.flash('error', 'Da! Der Schlüssel zum Zurücksetzen des Passwortes ist ungültig oder bereits abgelaufen.');
+      console.log("req.params.token: "+ req.params.token);
+      return res.redirect('/forgot');
+    }
+    res.render('reset', {token: req.params.token});
+  });
+});
+
+router.post('/reset/:token', function(req, res) {
+  async.waterfall([
+    function(done) {
+      User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+        if (!user) {
+          req.flash('error', 'Hier! Der Schlüssel zum Zurücksetzen des Passwortes ist ungültig oder bereits abgelaufen.');
+          return res.redirect('back');
+        }
+        if(req.body.password === req.body.confirm) {
+          user.setPassword(req.body.password, function(err) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+
+            user.save(function(err) {
+              req.logIn(user, function(err) {
+                done(err, user);
+              });
+            });
+          });
+        } else {
+            req.flash("error", "Passwörter stimmen nicht überrein.");
+            return res.redirect('back');
+        }
+      });
+    },
+    function(user, done) {
+      var smtpTransport = nodemailer.createTransport({
+        service: 'Gmail', 
+        auth: {
+          user: 'freizeitverein.server@gmail.com',
+          pass: process.env.GMAILSERVERPW
+        }
+      });
+      var mailOptions = {
+        to: user.email,
+        from: 'freizeitverein.server@gmail.com',
+        subject: 'Freizeitverein: Dein Passwort wurde geändert.',
+        text: 'Hello,\n\n' +
+          'Das ist die Bestätigung das dein Passwort für den Benutzer mit der Emailadresse ' + user.email + ' grade geändert wurde.\n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        req.flash('success', 'Dein Passwort würde erfolgreich geändert!');
+        done(err);
+      });
+    }
+  ], function(err) {
+    res.redirect('/events');
+  });
+});
 
 
 

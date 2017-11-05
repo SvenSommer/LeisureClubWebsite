@@ -14,7 +14,7 @@ middlewareObj.checkEventOwnership = function(req, res, next) {
                     res.redirect("back");
                 } else {
                     //Does the user own the event?
-                    if (foundEvent.author.id.equals(req.user._id)) {
+                    if (foundEvent.author.id.equals(req.user._id) || req.user.isAdmin) {
                        next();
                     }
                     else{
@@ -38,7 +38,7 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
                     res.redirect("back");
                 } else {
                     //Does the user own the event?
-                    if (foundComment.author.id.equals(req.user._id)) {
+                    if (foundComment.author.id.equals(req.user._id) || req.user.isAdmin) {
                        next();
                     }
                     else{

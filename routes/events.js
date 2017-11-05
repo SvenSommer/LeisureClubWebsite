@@ -3,19 +3,20 @@ var express = require("express");
 var router = express.Router();
 var Event = require("../models/event");
 var middleware = require("../middleware");
+var geocoder = require('geocoder');
 // ===================================
 // EVENT ROUTES
 // ===================================
 
 //INDEX - show all events
 router.get("/", function(req, res){
-    
+    // Get all events from DB
     Event.find({},function(err, events){
         if(err){
             console.log(err);
         }
         else {
-            res.render("events/index", {events: events});
+            res.render("events/index", {events: events, page: 'events'});
         }
     });
 });
@@ -28,7 +29,6 @@ router.post("/", middleware.isLoggedIn, function(req,res){
     var title = req.body.title;
     var image =  req.body.image;
     var description =req.body.description;
-    var place =req.body.place;
     var meetingpoint =req.body.meetingpoint;
     var date =req.body.date;
     var time =req.body.time;
@@ -39,30 +39,36 @@ router.post("/", middleware.isLoggedIn, function(req,res){
         id: req.user._id,
         username: req.user.username
     };
-    console.log("time=" + time);
-    var newEvent = {
-        title : title,
-        author: author,
-        image: image,
-        description : description,
-        place : place,
-        meetingpoint : meetingpoint,
-        date : date,
-        time : time,
-        deadline : deadline,
-        subscribers : subscribers,
-        fee : fee
-        };
     
-    Event.create(newEvent, function(err, newlyCreated){
-       if(err){
-           console.log(err);
-       } 
-       else {
-             res.redirect("/events");
-       }
+    geocoder.geocode(req.body.location, function (err, data) {
+        var lat = data.results[0].geometry.location.lat;
+        var lng = data.results[0].geometry.location.lng;
+        var location = data.results[0].formatted_address;
+        var newEvent = {
+            title : title,
+            author: author,
+            image: image,
+            description : description,
+            location : location,
+            lat: lat, 
+            lng: lng,
+            meetingpoint : meetingpoint,
+            date : date,
+            time : time,
+            deadline : deadline,
+            subscribers : subscribers,
+            fee : fee
+            };
+        // Create a new Event and save to DB
+        Event.create(newEvent, function(err, newlyCreated){
+           if(err){
+               console.log(err);
+           } 
+           else {
+                 res.redirect("/events");
+           }
+        });
     });
-    
 
 });
 
@@ -98,15 +104,41 @@ router.get("/:id/edit", middleware.checkEventOwnership, function(req, res) {
 
 //UPDATE ROUTE
 router.put("/:id", middleware.checkEventOwnership, function(req,res){
-    req.body.event.body = req.sanitize(req.body.event.body);
-    Event.findByIdAndUpdate(req.params.id, req.body.event, function(err,updatedEvent){  
-     if (err) {
-            console.log(err);
-            res.redirect("/events");
+    //req.body = req.sanitize(req.body);
+    console.log("req.body.description:" +  req.body.description);
+    console.log("req.body.location:" +  req.body.location);    
+    geocoder.geocode(req.body.location, function (err, data) {
+    var lat = data.results[0].geometry.location.lat;
+    var lng = data.results[0].geometry.location.lng;
+    var location = data.results[0].formatted_address;
+    var newData = 
+    {
+        title: req.body.title, 
+        image: req.body.image, 
+        description: req.body.description, 
+        location : location,
+        lat: lat, 
+        lng: lng,
+        meetingpoint: req.body.meetingpoint, 
+        date: req.body.date, 
+        time: req.body.time, 
+        deadline: req.body.deadline, 
+        subscribers: req.body.subscribers, 
+        fee: req.body.fee
+    };
+    console.log("newData:" +  newData);
+
+    
+    Event.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, campground){
+        if(err){
+            req.flash("error", err.message);
+            res.redirect("back");
         } else {
-            res.redirect("/events/" + req.params.id);
+            req.flash("success","Erfolgreich bearbeitet!");
+            res.redirect("/events/" + campground._id);
         }
     });
+  });
 });
 
 //DELETE ROUTE
