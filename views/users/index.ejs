@@ -1,6 +1,28 @@
 <% include ../partials/header %>
     
     
-    <h1>USERS</h1>
+    <h1>Mitglieder des Freizeitvereins</h1>
+    <table class="table table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>Benutzername</th>
+                <th>Vorname</th>
+                <th>Nachname</th>
+                <th>Email</th>
+                <th>Telefonnummer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(function(user){ %>
+            <tr>
+                <td><a href="/users/<%= user._id %>"><%= user.username %></a></td>
+                <td><%= user.firstname %></td>
+                <td><%= user.lastname %></td>
+                <td><%= user.email %></td>
+                <td><%= user.telephone %></td>
+            </tr>
+            <% }); %>
+        </tbody>
+  </table>
 
-<% include ../partials/footer %>
+<% include ../partials/footer %>node 

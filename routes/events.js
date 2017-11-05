@@ -9,7 +9,7 @@ var geocoder = require('geocoder');
 // ===================================
 
 //INDEX - show all events
-router.get("/", function(req, res){
+router.get("/", middleware.isLoggedIn, function(req, res){
     // Get all events from DB
     Event.find({},function(err, events){
         if(err){
@@ -80,7 +80,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 
 
 //SHOW - shows more info abaut one event
-router.get("/:id", function(req, res) {
+router.get("/:id",middleware.isLoggedIn, function(req, res) {
     Event.findById(req.params.id).populate("comments").exec(function(err, foundEvent){
         if (err || !foundEvent) {
             req.flash("error","Veranstaltung nicht gefunden!");
