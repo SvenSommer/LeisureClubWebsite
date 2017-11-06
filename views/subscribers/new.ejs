@@ -1,0 +1,22 @@
+<% include ../partials/header %>
+
+
+<div class="row">
+    <h1 style="text-align: center;"> Möchtest du am Event <%=event.title %> teilnehmen?</h1>
+    <div style="width: 30%; margin: 25px auto;">
+        <form  action="/events/<%=event._id %>/subscribers" method="POST">
+            <div class="form-group">
+                <input class="form-control" type="text" name="subscriber[text]" placeholder="Kommentar">
+            </div>
+            <div class="form-group">
+               <button class="btn btn-lg btn-primary btn-block">Teilnehmen</button>
+            </div>
+        </form>
+        <a href="/events">Zurück</a>
+    </div>
+    
+</div>
+
+
+<% include ../partials/footer %>
+

@@ -4,35 +4,54 @@
         <h1>Profil von <%= user.username%></h1>
     </div>
     <div class="col-md-4">
-        <div class="thumbnail">
-            <img src="<%= user.avatar%>" alt="Avatar von <%= user.username%>">
-            <hr>
+        <div class="well well-sm">
             <div class="caption">
-                <p><%= user.firstname%> <%= user.lastname %>
+                <div class="thumbnail">
+                    <img src="<%= user.avatar%>" class="img-thumbnail" alt="<%= user.username%> hat noch kein Bild hinterlegt">
+                </div>
+                <strong><%= user.firstname%> <%= user.lastname %></strong>
                 <% if(user.isAdmin) { %>
                 <em>(Administrator)</em>
                 <% } %>
                 </p>
-                
-                <p><%= user.streetAndNumber%><br><%= user.zipcode%> <%= user.city%></p>
-                <a href="mailto: <%= user.email%>"><%= user.email%></a>
-                <p><%= user.telephone%></p>
-                <p><em>Mitglied seit <%= moment(user.created).format('DD. MMM YYYY') %></em></p>
+
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>Adresse</td>
+                            <td><%= user.streetAndNumber%><br><%= user.zipcode%> <%= user.city%></td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td><a href="mailto: <%= user.email%>"><%= user.email%></a></td>
+                        </tr>
+                        <tr>
+                            <td>Telefon</td>
+                            <td><%= user.telephone%></td>
+                        </tr>
+                        <tr>
+                            <td>Mobil</td>
+                            <td><%= user.mobil%></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="align:center"><em>Mitglied seit <%= moment(user.created).format('DD. MMM YYYY') %></em></p>
                 <% if(currentUser && user._id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
+                    <hr>
                     <a class="btn btn-xs btn-warning" href="/users/<%=user._id%>/edit">Bearbeiten</a>
                     <form class="delete-form" action="/users/<%=user._id%>?_method=DELETE" method="POST">
                         <button class="btn btn-xs btn-danger">Profil löschen</button>
                     </form>
                  <% } %>   
              </div>
-        </div>
+           </div>
         <div class="thumbnail">
              
         </div>
     </div> 
     <div class="col-md-8">
         <div class="well">
-            <h3><%= user.username%>'s Veranstaltungen:</h3>
+            <h3>Von <%= user.username%> organisierte Veranstaltungen:</h3>
             <hr>
             <ul>
             <% events.forEach(function(event) { %>

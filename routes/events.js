@@ -33,7 +33,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
     var date =req.body.date;
     var time =req.body.time;
     var deadline =req.body.deadline;
-    var subscribers =req.body.subscribers;
+    var maxSubscribers = req.body.maxSubscribers;
     var fee =req.body.fee;
     var author = {
         id: req.user._id,
@@ -56,7 +56,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
             date : date,
             time : time,
             deadline : deadline,
-            subscribers : subscribers,
+            maxSubscribers : maxSubscribers,
             fee : fee
             };
         // Create a new Event and save to DB
@@ -69,7 +69,6 @@ router.post("/", middleware.isLoggedIn, function(req,res){
            }
         });
     });
-
 });
 
 //NEW - show form to create Event
@@ -81,7 +80,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 
 //SHOW - shows more info abaut one event
 router.get("/:id",middleware.isLoggedIn, function(req, res) {
-    Event.findById(req.params.id).populate("comments").exec(function(err, foundEvent){
+    Event.findById(req.params.id).populate("comments").populate("subscribers").exec(function(err, foundEvent){
         if (err || !foundEvent) {
             req.flash("error","Veranstaltung nicht gefunden!");
             res.redirect("back");
@@ -129,7 +128,7 @@ router.put("/:id", middleware.checkEventOwnership, function(req,res){
         date: req.body.date, 
         time: req.body.time, 
         deadline: req.body.deadline, 
-        subscribers: req.body.subscribers, 
+        maxSubscribers : req.body.maxSubscribers,
         fee: req.body.fee
     };
     console.log("newData:" +  newData);

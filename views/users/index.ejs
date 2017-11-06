@@ -10,6 +10,7 @@
                 <th>Nachname</th>
                 <th>Email</th>
                 <th>Telefonnummer</th>
+                <th>Mobil</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +21,7 @@
                 <td><a href="/users/<%= user._id %>"><%= user.lastname %></a></td>
                 <td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.telephone %></a></td>
+                <td><a href="/users/<%= user._id %>"><%= user.mobil %></a></td>
             </tr>
             <% }); %>
         </tbody>

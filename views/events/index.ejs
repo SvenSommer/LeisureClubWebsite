@@ -15,7 +15,7 @@
                 <div class= "thumbnail">
                     <img src ="<%= event.image %>">
                     <div class="caption">
-                        <h5><%= event.date %></h5>
+                        <h5><%= moment(event.date).format('DD. MMM YYYY') %></h5>
                         <h4><%= event.title %></h4>
                     </div>
                     <p><%= event.description.substring(0,100)%>...</p>

@@ -14,6 +14,7 @@ var express             = require("express"),
 
 var indexRoutes         = require("./routes/index"),
     commentRoutes       = require("./routes/comments"),
+    subscribersRoutes   = require("./routes/subscribers"),
     eventRoutes         = require("./routes/events"),
     usersRoutes         = require("./routes/users");
     
@@ -30,7 +31,6 @@ app.use(methodOverride("_method"));
 app.use(flash());
 
 moment.locale("de");
-moment().format('LLL');
 app.locals.moment = moment;
 //PASSPOORT CINFIGURATION
 app.use(require("express-session")({
@@ -56,7 +56,8 @@ app.use(function(req, res, next){
 
 app.use("/", indexRoutes);
 app.use("/events", eventRoutes);
-app.use("/events/:id/comments",commentRoutes);
+app.use("/events/:id/comments", commentRoutes);
+app.use("/events/:id/subscribers", subscribersRoutes);
 app.use("/users", usersRoutes);
 
 
