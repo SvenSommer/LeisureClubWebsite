@@ -52,7 +52,9 @@ while (date <= endDate)
                                 <div id= "indexthumbnail">
                                     <% if(event.image) {%>
                                         <img src="<%= event.image %>">
-                                    <% } %>
+                                    <% } else {%>
+                                        <img src="https://ideas.evite.com/media/slider-surprise-party-invitations-NC.jpg">
+                                    <% }%>
                                     <div class="caption">
                                         <h4><%= moment(event.date).format('DD. MMM YYYY') %></h4>
                                         <a href="/events/<%= event._id %>" ><h4><%= event.title.trunc(36) %></h4></a>
