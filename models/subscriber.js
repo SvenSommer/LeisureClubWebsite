@@ -7,7 +7,7 @@ var subscriberSchema = new mongoose.Schema({
         ref: "User"
     },
     username: String(),
-    created: {type: Date, default: Date.now}
+    created: { type: Date, default: Date.now }
 });
 
 module.exports =  mongoose.model("Subscriber", subscriberSchema);

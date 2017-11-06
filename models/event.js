@@ -37,7 +37,7 @@ var eventSchema = new mongoose.Schema({
         ref: "Comment"
     }],
 
-    created: {type: Date, default: Date.now}
+    created: { type: Date, default: Date.now }
 });
 
 module.exports =  mongoose.model("Event", eventSchema);

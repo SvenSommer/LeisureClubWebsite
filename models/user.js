@@ -18,7 +18,7 @@ var userSchema = new mongoose.Schema({
     streetAndNumber: String,
     telephone: String,
     mobil: String,
-    created: {type: Date, default: Date.now},
+    created: { type: Date, default: Date.now },
     isAdmin: {type: Boolean, default: false}
 });
 

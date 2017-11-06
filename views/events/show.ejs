@@ -12,7 +12,7 @@
         <div class="col-md-9">
             <div class="thumbnail">
                 <div class="caption-full">
-                <h2><%=event.title%> am </strong><%=moment(event.date).format('DD. MMM YYYY')%></h2>
+                <h2><%=event.title%> am </strong><%=moment(event.date).format('DD. MMMM YYYY')%></h2>
                  <!--Edit & Delete Buttons !-->
                  
                     <% if(currentUser && event.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
@@ -37,7 +37,7 @@
                     <% } %>
                    
                     <p>
-                        <em>erstellt von <a href="/users/<%= event.author.id %>"><%=event.author.username%></a>, <%= moment(event.createdAt).fromNow() %></em>
+                        <em>erstellt von <a href="/users/<%= event.author.id %>"><%=event.author.username%></a>, <%= moment(event.created).fromNow() %></em>
                     </p>
                     <% var isSubscribed = false%>
                     <!--Subscribe or Unsubscribe Buttons !--> 
@@ -66,13 +66,13 @@
                     <tbody>
                      <% event.subscribers.forEach(function(subscriber){ %>
                       <tr style="align-content: right">
-                            <td><strong><%= subscriber.username %></strong></td>
+                            <td><strong><a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a></strong></td>
                             <% if(currentUser && currentUser.isAdmin){%>
                                 <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
                                     <td><button class="btn btn-xs btn-danger">Teilnehmer abmelden</button></td>
                                 </form>
                             <% } %> 
-                            <td><%= moment(subscriber.createdAt).fromNow() %></td>
+                            <td><%= moment(subscriber.created).fromNow() %></td>
                       </tr>
                      <% }) %>   
                     </tbody>
@@ -88,16 +88,19 @@
                     <div class="row">
                         <div class="col-md-12">
                             <strong><%= comment.author.username %></strong>
-                            <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
-                            <p>
+                            <span class="pull-right"><%= moment(comment.created).fromNow() %></span>
+                            <div>
                                 <%= comment.text %>
-                            </p>
-                            <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
-                                <a class="btn btn-xs btn-warning" href="/events/<%= event._id %>/comments/<%= comment._id %>/edit">Bearbeiten</a>  
-                                <form class="delete-form" action="/events/<%= event._id %>/comments/<%= comment._id %>/?_method=DELETE" method="POST">
-                                    <button class="btn btn-xs btn-danger">Kommentar löschen</button>
-                                </form>
-                            <% } %>    
+                                <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
+                                    <div class="pull-right">
+                                        <a class="btn btn-xs btn-warning" href="/events/<%= event._id %>/comments/<%= comment._id %>/edit">Bearbeiten</a>  
+                                        <form class="delete-form" action="/events/<%= event._id %>/comments/<%= comment._id %>/?_method=DELETE" method="POST">
+                                            <button class="btn btn-xs btn-danger">Kommentar löschen</button>
+                                        </form>
+                                    </div>
+                                <% } %> 
+                                <hr>
+                            </div>
                         </div>
                     </div>
                 <% })%>
