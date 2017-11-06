@@ -39,20 +39,31 @@
                     <p>
                         <em>erstellt von <a href="/users/<%= event.author.id %>"><%=event.author.username%></a>, <%= moment(event.created).fromNow() %></em>
                     </p>
-                    <% var isSubscribed = false%>
+                    <% var isSubscribed = false;
+                    var cDate = new Date();
+                    var dDate = new Date(event.deadline);
+                    %>
                     <!--Subscribe or Unsubscribe Buttons !--> 
                     <% event.subscribers.forEach(function(subscriber){ %>
                         <% if(currentUser && subscriber.id.equals(currentUser._id)){ isSubscribed = true;%>
                             
                             <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
-                                 <button class="btn btn-lg btn-danger btn-block">Abmelden</button>
+                                 <% if(moment(cDate).isAfter(dDate)) {%>
+                                     <button class="btn btn-lg btn-danger btn-block disabled">Abmelden</button>
+                                 <% } else {%>
+                                     <button class="btn btn-lg btn-danger btn-block">Abmelden</button>
+                                 <% } %>
                             </form>
                         <% } %>
                     <% }) %>
 
                      <% if(!isSubscribed){ %>
                         <form  action="/events/<%=event._id %>/subscribers" method="POST">
-                           <button class="btn btn-lg btn-success btn-block">Anmelden</button>
+                            <% if(moment(cDate).isAfter(dDate)) {%>
+                                <button class="btn btn-lg btn-success btn-block disabled">Anmelden</button>
+                            <% } else {%>
+                                <button class="btn btn-lg btn-success btn-block">Anmelden</button>
+                            <% } %>    
                         </form>
                      <% } %>
                 </div>

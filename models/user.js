@@ -19,6 +19,7 @@ var userSchema = new mongoose.Schema({
     telephone: String,
     mobil: String,
     created: { type: Date, default: Date.now },
+    lastLogin: { type: Date, default: Date.now },
     isAdmin: {type: Boolean, default: false}
 });
 

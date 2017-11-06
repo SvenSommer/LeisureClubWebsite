@@ -4,7 +4,7 @@ TODO
 
 * event/show Karte anzeigen!?
 * event/show Bilder hochladen
-* event/show vor ein paar Sekunden korrigieren
+
 
 * event/subscribe Anmeldung nach Deadline sperren
 *
@@ -30,6 +30,7 @@ ______________________________________________
 
 DONE
 
+* event/show vor ein paar Sekunden korrigieren
 * event/index Vorschauen nach Datum sortieren
 * event/index Monatsübersicht
 * users/show Mobilnummer hinzufügen
