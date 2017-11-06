@@ -25,3 +25,7 @@
 .table td {
    text-align: center;   
 }
+
+.textarea {
+ min-height: 100px;
+}
