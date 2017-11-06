@@ -5,6 +5,7 @@
 
 .thumbnail {
     padding: 0;
+    height: 100%;
 }
 
 .thumbnail .caption-full{
@@ -28,4 +29,9 @@
 
 .textarea {
  min-height: 100px;
+}
+
+.row.display-flex {
+  display: flex;
+  flex-wrap: wrap;
 }
