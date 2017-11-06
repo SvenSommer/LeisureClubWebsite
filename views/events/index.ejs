@@ -1,30 +1,71 @@
 <% include ../partials/header %>
     <header class=jumbotron>
         <div class="container">
-            <h1>Willkommen beim Freizeitverein</h1>
-            <p>Veranstaltungen in deiner Region</p>
+            <h2>Kommende Veranstaltungen</h2>
             <p>
-                <a class="btn btn-primary btn-lg" href="/events/new">Neue Veranstaltung hinzufügen</a>
+                <a class="btn btn-success btn-lg" href="/events/new">Neue Veranstaltung hinzufügen</a>
             </p>
         </div>
     </header>
     
-    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% events.forEach(function(event){ %>
-            <div class="col-md-3 col-sm-6">
-                <div class= "thumbnail">
-                    <img src ="<%= event.image %>">
-                    <div class="caption">
-                        <h5><%= moment(event.date).format('DD. MMM YYYY') %></h5>
-                        <h4><%= event.title %></h4>
-                    </div>
-                    <p><%= event.description.substring(0,100)%>...</p>
-                    <p>
-                        <a href="/events/<%= event._id %>" class="btn btn-primary">Mehr lesen...</a>
-                    </p>
+
+<%
+String.prototype.trunc = String.prototype.trunc ||
+      function(n){
+          return (this.length > n) ? this.substr(0, n-1) + "..." : this;
+      };
+
+ //Maxdate 
+var tdates=[];
+events.forEach(function(event){
+    tdates.push(new Date(event.date));
+});
+var maxDate=new Date(Math.max.apply(null,tdates));
+
+//generate genMonths
+var genMonths = [];
+var date = new Date();
+var endDate = maxDate.setMonth(maxDate.getMonth() + 1);
+var monthNameList = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+while (date <= endDate)
+{
+    var headerstring = monthNameList[date.getMonth()] + " " + date.getFullYear();
+    var compareDate =  monthNameList[date.getMonth()] + "_" + date.getFullYear();
+    
+    genMonths.push({
+        headerstring: headerstring,
+        compareDate : compareDate
+    });
+    date.setMonth(date.getMonth() + 1);
+}
+%>
+
+    <div class="row text-center">
+        <%  genMonths.forEach(function(month){ %>
+            <div class="row">
+                <div>
+                    <h3><%= month.headerstring %></h3>
+                    <hr>
+                    <% events.forEach(function(event){ %>
+                        <% if(moment(event.date).format('MMM_YYYY').replace('.', '') == month.compareDate) { %>
+                            <div class="col-md-3 col-sm-6">
+                                <div id= "indexthumbnail">
+                                    <a href="/events/<%= event._id %>" ><img src="<%= event.image %>"></a>
+                                    <div class="caption">
+                                        <h5><%= moment(event.date).format('DD. MMM YYYY') %></h5>
+                                        <a href="/events/<%= event._id %>" ><h4><%= event.title.trunc(36) %></h4></a>
+                                    </div>
+                                    <p><%= event.description.trunc(100)%>...</p>
+                                    <p>
+                                        <a href="/events/<%= event._id %>" class="btn btn-primary">Details</a>
+                                    </p>
+                                </div>
+                            </div>
+                        <% } %>    
+                    <% }); %>
                 </div>
             </div>
-        <% }); %>
+        <% }); %>    
     </div>
 
 <% include ../partials/footer %>
