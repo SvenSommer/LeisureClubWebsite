@@ -17,8 +17,17 @@ var indexRoutes         = require("./routes/index"),
     subscribersRoutes   = require("./routes/subscribers"),
     eventRoutes         = require("./routes/events"),
     usersRoutes         = require("./routes/users");
-    
-console.log("DatabaseUrl: " + process.env.DATABASEURL);
+
+if (!process.env.DATABASEURL) {
+    console.log("DATABASEURL is not defined!");
+}    
+if (!process.env.PASSWORDSECRET) {
+    console.log("PASSWORDSECRET is not defined!");
+}    
+if (!process.env.GMAILSERVERPW) {
+    console.log("GMAILSERVERPW is not defined!");
+}    
+
 //APP Config    
 var url = process.env.DATABASEURL || "mongodb://localhost/freizeitverein";
 mongoose.connect(url, {useMongoClient: true});
@@ -37,15 +46,15 @@ app.use(require("express-session")({
     secret: process.env.PASSWORDSECRET,
     resave: false,
     saveUninitialized: false
-    
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-//local passport
 
+//local passport
 app.use(function(req, res, next){
    res.locals.currentUser = req.user;
    res.locals.error = req.flash("error");

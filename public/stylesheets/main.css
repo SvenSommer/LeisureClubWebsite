@@ -1,11 +1,14 @@
-.thumbnail img {
-   width: 100%;
-   
-}
-
 .thumbnail {
     padding: 0;
     height: 100%;
+}
+
+.thumbnail img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 140px;
+    overflow: hidden;
 }
 
 .thumbnail .caption-full{
@@ -35,3 +38,4 @@
   display: flex;
   flex-wrap: wrap;
 }
+

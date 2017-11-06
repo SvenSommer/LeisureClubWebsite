@@ -18,7 +18,7 @@ router.get("/", middleware.isLoggedIn, function(req, res){
         else {
             res.render("events/index", {events: events, page: 'events'});
         }
-    });
+    }).sort({"date":1});
 });
 
 //CREATE - add new event to DB

@@ -48,8 +48,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
        }
     });
 });
-//action="/events/59ff8ea38c3efd712f11300e/subscribers/59ff8eab8c3efd712f11300f/?_method=DELETE"
-///        events/59ff8ea38c3efd712f11300e/comments   /59ffa6cefc9d9772c7a1d70c/?_method=DELETE
+
 //SUBSCRIBER DESTROY ROUTE
 router.delete("/:subscriber_id", function(req, res){
     Subscriber.findByIdAndRemove(req.params.subscriber_id, function(err){
