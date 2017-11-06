@@ -50,7 +50,7 @@ while (date <= endDate)
                         <% if(moment(event.date).format('MMM_YYYY').replace('.', '') == month.compareDate) { %>
                             <div class="col-md-3 col-sm-6">
                                 <div id= "indexthumbnail">
-                                    <a href="/events/<%= event._id %>" ><img src="<%= event.image %>"></a>
+                                    <img src="<%= event.image %>">
                                     <div class="caption">
                                         <h5><%= moment(event.date).format('DD. MMM YYYY') %></h5>
                                         <a href="/events/<%= event._id %>" ><h4><%= event.title.trunc(36) %></h4></a>
