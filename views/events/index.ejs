@@ -29,7 +29,7 @@ var endDate = maxDate.setMonth(maxDate.getMonth() + 1);
 var monthNameList = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
 while (date <= endDate)
 {
-    var headerstring = monthNameList[date.getMonth()] + " " + date.getFullYear();
+    var headerstring = moment(date).format('MMMM') + " " + date.getFullYear();
     var compareDate =  monthNameList[date.getMonth()] + "_" + date.getFullYear();
     
     genMonths.push({
@@ -50,9 +50,11 @@ while (date <= endDate)
                         <% if(moment(event.date).format('MMM_YYYY').replace('.', '') == month.compareDate) { %>
                             <div class="col-md-3 col-sm-6">
                                 <div id= "indexthumbnail">
-                                    <img src="<%= event.image %>">
+                                    <% if(event.image) {%>
+                                        <img src="<%= event.image %>">
+                                    <% } %>
                                     <div class="caption">
-                                        <h5><%= moment(event.date).format('DD. MMM YYYY') %></h5>
+                                        <h4><%= moment(event.date).format('DD. MMM YYYY') %></h4>
                                         <a href="/events/<%= event._id %>" ><h4><%= event.title.trunc(36) %></h4></a>
                                     </div>
                                     <p><%= event.description.trunc(100)%>...</p>

@@ -14,14 +14,14 @@ var eventSchema = new mongoose.Schema({
         ref: "User"
         
     }],
-    title: String,
+    title: {type: String, required:true},
     image: String,
-    description: String,
+    description: {type: String, required:true},
     meetingpoint: String,
-    location: String,
+    location: {type: String, required:true},
     lat: Number,
     lng: Number,
-    date: String,
+    date: {type: String, required:true},
     time: String,
     deadline: String,
     fee: String,
