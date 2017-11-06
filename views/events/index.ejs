@@ -58,7 +58,7 @@ while (date <= endDate)
                                         <% }%>
                                         <% if(event.maxSubscribers &&  (event.subscribers.length >= event.maxSubscribers)) {%>
                                             <div class="bottom-right red"><%= event.subscribers.length %> / <%= event.maxSubscribers %></div>
-                                        <%} else if(event.maxSubscribers &&  (event.maxSubscribers.length < event.maxSubscribers)) {%>
+                                        <%} else if(event.maxSubscribers &&  (event.subscribers.length < event.maxSubscribers)) {%>
                                             <div class="bottom-right green"><%= event.subscribers.length %> / <%= event.maxSubscribers %></div>
                                         <% } %>                                        
                                     </div>
