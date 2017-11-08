@@ -1,7 +1,7 @@
 <% include ../partials/header %>
     <header class=jumbotron>
         <div class="container">
-            <h2>Bevorstehende Veranstaltungen des Freizeitvereins</h2>
+            <h2>Bevorstehende Veranstaltungen</h2>
             <p>
                 <a class="btn btn-success btn-lg" href="/events/new">Neue Veranstaltung hinzufügen</a>
             </p>
@@ -39,66 +39,80 @@ while (date <= endDate)
     date.setMonth(date.getMonth() + 1);
 }
 %>
-<% var viewClassic = true; %>
+<% var viewClassic = currentUser.viewClassic; %>
+
+<!--CLASSIC VIEW-->
 <% if (viewClassic) {%>
-    <table class="table table-hover table-responsive">
-        <thead>
-            <tr>
-                <th>Datum</th>
-                <th>Beschreibung</th>
-                <th>Anmeld.</th>
-                <th>Bearb.</th>
-                <th>angmeldet sind</th>
-                <th>Aktion</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% events.forEach(function(event){ %>
-            <tr>
-                <td><%= moment(event.date).format('DD.MM.YYYY dddd') %></td>
-                <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
-                <td><a href="/events/<%= event._id %>"><%= moment(event.deadline).format('DD.MM.') %></a></td>
-                <td><a href="/events/<%= event._id %>"><%= event.fee %> €</a></td>
-                <td>
-                    <% event.subscribers.forEach(function(subscriber){ %>
-                        <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>
-                    <% }); %>
-                </td>    
-                <td>
-                     <% var isSubscribed = false;
-                    var cDate = new Date();
-                    var dDate = new Date(event.deadline);
-                    %>
-                    <!--Subscribe or Unsubscribe Buttons !--> 
-                    <% event.subscribers.forEach(function(subscriber){ %>
-                        <% if(currentUser && subscriber.id.equals(currentUser._id)){ isSubscribed = true;%>
-                            <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
-                                 <% if(moment(cDate).isAfter(dDate)) {%>
-                                     <button class="btn btn-lg btn-danger btn-block disabled">Abmelden</button>
-                                 <% } else {%>
-                                     <button class="btn btn-lg btn-danger btn-block">Abmelden</button>
-                                 <% } %>
-                            </form>
-                        <% } %>
-
-                    <% }) %>
-
-                     <% if(!isSubscribed){ %>
-                        <form  action="/events/<%=event._id %>/subscribers" method="POST">
-                            <% if(moment(cDate).isAfter(dDate)) {%>
-                                <button class="btn btn-lg btn-success btn-block disabled">Anmelden</button>
-                            <% } else {%>
-                                <button class="btn btn-lg btn-success btn-block">Anmelden</button>
-                            <% } %>    
-                        </form>
-                     <% } %>
-                </td>
-            </tr>
-            <% }); %>
-        </tbody>
-    </table>
-
-
+        <div class="row">
+        <%  genMonths.forEach(function(month){ %>
+            <div class="row">
+                <div>
+                    <h3><%= month.headerstring %></h3>
+                    <hr>
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Datum</th>
+                                <th>Beschreibung</th>
+                                <th>Anmeld.</th>
+                                <th>Bearb.</th>
+                                <th>angmeldet sind</th>
+                                <th>Aktion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% events.forEach(function(event){ %>
+                                <% if(moment(event.date).format('MMM_YYYY').replace('.', '') == month.compareDate) { %>
+                                    <tr>
+                                        <td><%= moment(event.date).format('DD.MM.YYYY dddd') %></td>
+                                        <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
+                                        <td><a href="/events/<%= event._id %>"><%= moment(event.deadline).format('DD.MM.') %></a></td>
+                                        <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>
+                                        <td>
+                                            <% event.subscribers.forEach(function(subscriber){ %>
+                                                <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>
+                                            <% }); %>
+                                        </td>    
+                                        <td>
+                                             <% var isSubscribed = false;
+                                            var cDate = new Date();
+                                            var dDate = new Date(event.deadline);
+                                            %>
+                                            <!--Subscribe or Unsubscribe Buttons !--> 
+                                            <% event.subscribers.forEach(function(subscriber){ %>
+                                                <% if(currentUser && subscriber.id.equals(currentUser._id)){ isSubscribed = true;%>
+                                                    <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
+                                                         <% if(moment(cDate).isAfter(dDate)) {%>
+                                                             <button class="btn btn-lg btn-danger btn-block disabled">Abmelden</button>
+                                                         <% } else {%>
+                                                             <button class="btn btn-lg btn-danger btn-block">Abmelden</button>
+                                                         <% } %>
+                                                    </form>
+                                                <% } %>
+                        
+                                            <% }) %>
+                        
+                                             <% if(!isSubscribed){ %>
+                                                <form  action="/events/<%=event._id %>/subscribers" method="POST">
+                                                    <% if(moment(cDate).isAfter(dDate)) {%>
+                                                        <button class="btn btn-lg btn-success btn-block disabled">Anmelden</button>
+                                                    <% } else {%>
+                                                        <button class="btn btn-lg btn-success btn-block">Anmelden</button>
+                                                    <% } %>    
+                                                </form>
+                                             <% } %>
+                                        </td>
+                                    </tr>
+                                <% } %>  
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <% }); %>    
+    </div>
+   
+<!--MODERN VIEW-->
 <% } else { %>
     <div class="row">
         <%  genMonths.forEach(function(month){ %>

@@ -7,24 +7,23 @@ TODO
 
 
 
-*
+
 
 * event/index alte/neue Ansicht umschalten
 * event/index vergangene Veranstaltungen ansehen
 * event/index Details button unten fixieren
-* 
+
 
 * user/login Zeitpunkt speichern
 
 * user/show last loginzeit anzeigen
 
-* Title ändern: "Kreis der lustigen Leute"
-* Bilder ändern: Straussee Panorama Strausberg, Strausberger Fähre, Kegel, Fahrradtour, Konzert
-* Erstelle ein neues Kommentar zur Veranstaltung ""
-* event/ show: Tabelle untereinander ;  Anmeldeschluss Datum reihenfolge
-* event/ index: Rahmen dicker
+* user/show teilnehmende veranstaltungen des Benutzers
 
-* event/new fee alsText
+ 
+
+
+
 
 
 
@@ -33,6 +32,12 @@ TODO
 ______________________________________________ 
 
 DONE
+* Title ändern: "Kreis der lustigen Leute"
+* event/index: classic Monatsübersicht
+* * event/ show: Tabelle untereinander ;  Anmeldeschluss Datum reihenfolge
+* event/ index: Rahmen dicker
+* Bilder ändern: Straussee Panorama Strausberg, Strausberger Fähre, Kegel, Fahrradtour, Konzert
+* event/new     fee alsText
 * event/subscribe Anmeldung nach Deadline sperren
 
 * event/show vor ein paar Sekunden korrigieren
@@ -41,7 +46,6 @@ DONE
 * users/show Mobilnummer hinzufügen
 * user/edit  Mobilnummer eintragen
 * users/show Avatar in Bild umbenennen
-
 * event/index Vorschauen gleich groß
 
 * event/show Bilder klein

@@ -3,6 +3,7 @@
     <div class="col-md-12">
         <h1>Profil von <%= user.username%></h1>
     </div>
+    <!-- Visitenkarte -->
     <div class="col-md-4">
         <div class="well well-sm">
             <div class="caption">
@@ -14,7 +15,6 @@
                 <em>(Administrator)</em>
                 <% } %>
                 </p>
-
                 <table class="table table-condensed">
                     <tbody>
                         <tr>
@@ -43,12 +43,9 @@
                         <button class="btn btn-xs btn-danger">Profil löschen</button>
                     </form>
                  <% } %>   
-             </div>
-           </div>
-        <div class="thumbnail">
-             
+            </div>
         </div>
-    </div> 
+    </div>
     <div class="col-md-8">
         <div class="well">
             <h3>Von <%= user.username%> organisierte Veranstaltungen:</h3>
@@ -60,6 +57,19 @@
             </ul>
         </div>
     </div>
+    <div class="col-md-8">
+        <div class="well">
+            <h3>Veranstaltungen an deinen <%= user.username%> teilnimmt</h3>
+            <hr>
+            <ul>
+            <% eventsSubscribed.forEach(function(eventSubscribed) { %>
+                <li><a href="/events/<%= eventSubscribed.id %>"><%= eventSubscribed.title %> am <%= eventSubscribed.date %></a></li>
+             <% });%> 
+            </ul>
+        </div>
+    </div>
 </div>
+    
+
 
 <% include ../partials/footer %>

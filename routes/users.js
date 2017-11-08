@@ -30,10 +30,19 @@ router.get("/:id", middleware.isLoggedIn, function(req, res) {
         } else {
             Event.find().where("author.id").equals(foundUser._id).exec(function(err, foundEvents){
                 if (err) {
-                    req.flash("error","Mitglied nicht gefunden!");
+                    req.flash("error","Organiserte Veranstaltungen nicht gefunden!");
                     res.redirect("/");
                 }
-                res.render("users/show",{user:foundUser, events: foundEvents});
+                Event.find().where("subscriber.id").equals(foundUser._id).exec(function(err, foundeventsSubscribed){
+                    if (err) {
+                    req.flash("error","Veranstaltungen an denen teilgenommen wird nicht gefunden!");
+                    res.redirect("/");
+                    }
+                    res.render("users/show",{user:foundUser, 
+                                            events: foundEvents,
+                                            eventsSubscribed: foundeventsSubscribed 
+                    });
+                });
             });
         }
     });
@@ -49,6 +58,13 @@ router.get("/:id/edit", middleware.checkUserOwnership, function(req, res) {
 
 //UPDATE - Update info
 router.put("/:id",middleware.checkUserOwnership, function(req, res){
+    if (!req.body.user.viewClassic) {
+        req.body.user.viewClassic= false;
+    }
+    else {
+         req.body.user.viewClassic= true;
+    }
+    
     User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
         if (err || !updatedUser) {
             req.flash("error","Mitglied nicht gefunden!");
