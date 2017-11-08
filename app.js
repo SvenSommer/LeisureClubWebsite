@@ -18,6 +18,9 @@ var indexRoutes         = require("./routes/index"),
     eventRoutes         = require("./routes/events"),
     usersRoutes         = require("./routes/users");
 
+
+// killall mongod ; cd ; ./mongod --repair ; cd data ; rm -rf mongod.lock ; cd ; ./mongod
+
 if (!process.env.DATABASEURL) {
     console.log("DATABASEURL is not defined!");
 }    

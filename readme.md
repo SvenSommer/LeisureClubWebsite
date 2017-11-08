@@ -6,7 +6,7 @@ TODO
 * event/show Bilder hochladen
 
 
-* event/subscribe Anmeldung nach Deadline sperren
+
 *
 
 * event/index alte/neue Ansicht umschalten
@@ -17,10 +17,14 @@ TODO
 * user/login Zeitpunkt speichern
 
 * user/show last loginzeit anzeigen
-* 
 
+* Title ändern: "Kreis der lustigen Leute"
+* Bilder ändern: Straussee Panorama Strausberg, Strausberger Fähre, Kegel, Fahrradtour, Konzert
+* Erstelle ein neues Kommentar zur Veranstaltung ""
+* event/ show: Tabelle untereinander ;  Anmeldeschluss Datum reihenfolge
+* event/ index: Rahmen dicker
 
-
+* event/new fee alsText
 
 
 
@@ -29,6 +33,7 @@ TODO
 ______________________________________________ 
 
 DONE
+* event/subscribe Anmeldung nach Deadline sperren
 
 * event/show vor ein paar Sekunden korrigieren
 * event/index Vorschauen nach Datum sortieren

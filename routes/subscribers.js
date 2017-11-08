@@ -15,6 +15,7 @@ router.get("/new", middleware.isLoggedIn, function(req,res){
        } else
        {
             res.render("subscribers/new", {event:foundEvent});
+           // res.redirect("back");   
        }
     });
 });
@@ -38,7 +39,8 @@ router.post("/", middleware.isLoggedIn, function(req,res){
                     var dDate = new Date(foundevent.deadline);
                     if(moment(cDate).isAfter(dDate) && !req.user.isAdmin){
                         req.flash("error", "Die Anmeldefrist für diese Veranstaltung ist bereits abgelaufen!");
-                        res.redirect("/events/" + foundevent._id);
+                        //res.redirect("/events/" + foundevent._id);
+                        res.redirect("back");  
                     } else {                    
                         //add username and id to subscriber
                         subscriber.id = req.user._id;
@@ -49,7 +51,8 @@ router.post("/", middleware.isLoggedIn, function(req,res){
                         foundevent.save();
                         
                         req.flash("success", "Du hast dich erfolgreich für " + foundevent.title + " angemeldet!");
-                        res.redirect("/events/" + foundevent._id);
+                       // res.redirect("/events/" + foundevent._id);
+                       res.redirect("back");   
                             
                     }
                     
@@ -73,7 +76,8 @@ router.delete("/:subscriber_id", function(req, res){
             console.log("dDate" + dDate);
             if(moment(cDate).isAfter(dDate) &&  !req.user.isAdmin){
                 req.flash("error", "Die Anmeldefrist und damit auch Abmeldefrist für diese Veranstaltung ist bereits abgelaufen!");
-                res.redirect("/events/" + foundevent._id);
+                res.redirect("back");  
+                //res.redirect("/events/" + foundevent._id);
             } else { 
                 Subscriber.findByIdAndRemove(req.params.subscriber_id, function(err){
                     if (err) {
@@ -81,7 +85,8 @@ router.delete("/:subscriber_id", function(req, res){
                     } else
                     {
                         req.flash("success", "Erfolgreich abgemeldet!");
-                        res.redirect("/events/"+ req.params.id);
+                       // res.redirect("/events/"+ req.params.id);
+                        res.redirect("back");   
                     }
                 });
             }

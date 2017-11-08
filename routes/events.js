@@ -11,14 +11,14 @@ var geocoder = require('geocoder');
 //INDEX - show all events
 router.get("/", middleware.isLoggedIn, function(req, res){
     // Get all events from DB
-    Event.find({},function(err, events){
+    Event.find().sort({"date":1}).populate("subscribers").exec(function(err, events){
         if(err){
             console.log(err);
         }
         else {
             res.render("events/index", {events: events, page: 'events'});
         }
-    }).sort({"date":1});
+    })
 });
 
 //CREATE - add new event to DB
