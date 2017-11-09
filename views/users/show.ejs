@@ -52,18 +52,7 @@
             <hr>
             <ul>
             <% events.forEach(function(event) { %>
-                <li><a href="/events/<%= event.id %>"><%= event.title %> am <%= event.date %></a></li>
-             <% });%> 
-            </ul>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <div class="well">
-            <h3>Veranstaltungen an deinen <%= user.username%> teilnimmt</h3>
-            <hr>
-            <ul>
-            <% eventsSubscribed.forEach(function(eventSubscribed) { %>
-                <li><a href="/events/<%= eventSubscribed.id %>"><%= eventSubscribed.title %> am <%= eventSubscribed.date %></a></li>
+                <li><a href="/events/<%= event.id %>"><%= event.title %> am <%= moment(event.date).format('DD. MMM YYYY') %></a></li>
              <% });%> 
             </ul>
         </div>

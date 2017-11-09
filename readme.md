@@ -7,9 +7,6 @@ TODO
 
 
 
-
-
-* event/index alte/neue Ansicht umschalten
 * event/index vergangene Veranstaltungen ansehen
 * event/index Details button unten fixieren
 
@@ -32,6 +29,8 @@ TODO
 ______________________________________________ 
 
 DONE
+* event/index alte/neue Ansicht umschalten
+* user/show  Veranstzaltungen am Datum
 * Title ändern: "Kreis der lustigen Leute"
 * event/index: classic Monatsübersicht
 * * event/ show: Tabelle untereinander ;  Anmeldeschluss Datum reihenfolge

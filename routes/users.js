@@ -33,11 +33,13 @@ router.get("/:id", middleware.isLoggedIn, function(req, res) {
                     req.flash("error","Organiserte Veranstaltungen nicht gefunden!");
                     res.redirect("/");
                 }
-                Event.find().where("subscriber.id").equals(foundUser._id).exec(function(err, foundeventsSubscribed){
+                Event.find().where("subscribers").equals(foundUser._id).exec(function(err, foundeventsSubscribed){
                     if (err) {
-                    req.flash("error","Veranstaltungen an denen teilgenommen wird nicht gefunden!");
+                    req.flash("error","Veranstaltungen an denen teilgenommen wird/wurde, wurde nicht gefunden!");
                     res.redirect("/");
                     }
+                    console.log("foundeventsSubscribed: "+ foundeventsSubscribed)
+                    console.log("foundUser._id: "+ foundUser._id)
                     res.render("users/show",{user:foundUser, 
                                             events: foundEvents,
                                             eventsSubscribed: foundeventsSubscribed 
