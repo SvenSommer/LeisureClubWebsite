@@ -1,5 +1,4 @@
 var express             = require("express"),
-    ExpressTranslate    = require('express-translate'),
     app                 = express(),
     bodyParser          = require("body-parser"),
     mongoose            = require("mongoose"),
@@ -54,10 +53,6 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
 
-//Translations
-var expressTranslate = new ExpressTranslate();
-expressTranslate.addLanguage('en', { welcome: 'Willkommen beim ${clubname}' });
-app.use(expressTranslate.middleware());
 
 
 
@@ -82,15 +77,10 @@ app.use(function(req, res, next){
    res.locals.currentUser = req.user;
    res.locals.error = req.flash("error");
    res.locals.success = req.flash("success");
+   res.locals.clubname = "[Platzhalter für den Namen des Clubs]";
    next();
 });
 
-//App variables
-app.use(function(req, res, next){
-       res.locals.clubname = "[Platzhalter für den Namen des Clubs]";
-       
-       
-});
 
 app.use("/", indexRoutes);
 app.use("/events", eventRoutes);
