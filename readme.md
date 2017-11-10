@@ -1,6 +1,6 @@
 # LeisureClub Website
 A website for elderly/seniors to create and subscribe to events.
-A Testversion is available here: (LeisureClub)[https://serene-sierra-20655.herokuapp.com/].<br>
+A Testversion is available here: [LeisureClub](https://serene-sierra-20655.herokuapp.com/).<br>
 Register with passphrase ("Codewort"): "Sommerblume"
 
 
