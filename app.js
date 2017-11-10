@@ -1,4 +1,5 @@
 var express             = require("express"),
+    ExpressTranslate    = require('express-translate'),
     app                 = express(),
     bodyParser          = require("body-parser"),
     mongoose            = require("mongoose"),
@@ -30,6 +31,17 @@ if (!process.env.PASSWORDSECRET) {
 if (!process.env.GMAILSERVERPW) {
     console.log("GMAILSERVERPW is not defined!");
 }    
+if (!process.env.MAILADRESS) {
+    console.log("MAILADRESS is not defined!");
+}
+if (!process.env.USERPASSPHRASE) {
+    console.log("USERPASSPHRASE is not defined!");
+}  
+if (!process.env.ADMINPASSPHRASE) {
+    console.log("ADMINPASSPHRASE is not defined!");
+}  
+
+
 
 //APP Config    
 var url = process.env.DATABASEURL || "mongodb://localhost/freizeitverein";
@@ -42,6 +54,13 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
 
+//Translations
+var expressTranslate = new ExpressTranslate();
+expressTranslate.addLanguage('en', { welcome: 'Willkommen beim ${clubname}' });
+app.use(expressTranslate.middleware());
+
+
+
 moment.locale("de");
 app.locals.moment = moment;
 //PASSPOORT CINFIGURATION
@@ -50,6 +69,7 @@ app.use(require("express-session")({
     resave: false,
     saveUninitialized: false
 }));
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -62,12 +82,15 @@ app.use(function(req, res, next){
    res.locals.currentUser = req.user;
    res.locals.error = req.flash("error");
    res.locals.success = req.flash("success");
-   res.locals.clubname = "[Platzhalter für den Namen des Clubs]";
    next();
 });
 
-
-
+//App variables
+app.use(function(req, res, next){
+       res.locals.clubname = "[Platzhalter für den Namen des Clubs]";
+       
+       
+});
 
 app.use("/", indexRoutes);
 app.use("/events", eventRoutes);
@@ -77,5 +100,5 @@ app.use("/users", usersRoutes);
 
 
 app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Freizeitverein Server has started!");
+    console.log("Server has started!");
 });

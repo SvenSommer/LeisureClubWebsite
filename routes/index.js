@@ -10,10 +10,6 @@ router.get("/", function(req, res){
    res.render("landing");
 });
 
-
-
-
-
 // ===================
 // AUTH ROUTES
 // ===================
@@ -32,10 +28,10 @@ router.post("/register",function(req, res) {
         lastname:  req.body.lastname,
         email:  req.body.email
     });
-    if (req.body.passphrase === "Rauen") {
+    if (req.body.passphrase === process.env.ADMINPASSPHRASE) {
         newUser.isAdmin = true;
     }
-    else if (req.body.passphrase === "Sommerblume") {
+    else if (req.body.passphrase === process.env.USERPASSPHRASE) {
         newUser.isAdmin = false;
     } else {
         return res.render("register", {error: "Codeword nicht erkannt!"});   
@@ -110,13 +106,13 @@ router.post('/forgot', function(req, res, next) {
       var smtpTransport = nodemailer.createTransport({
         service: 'Gmail', 
         auth: {
-          user: 'freizeitverein.server@gmail.com',
+          user: process.env.MAILADRESS,
           pass: process.env.GMAILSERVERPW
         }
       });
       var mailOptions = {
         to: user.email,
-        from: 'freizeitverein.server@gmail.com',
+        from: process.env.MAILADRESS,
         subject: 'Freizeitverein: Passwort zurücksetzen',
         text: 'Du erhälst diese Nachricht da du (oder jemand anderes) eine Anfrage zum Zurücksetzen des Passwortes verschickt hat.\n\n' +
           'Bitte klicke auf den folgenden Link, oder kopiere in in deinen Browser um dein Passwort zurückzusetzen:\n\n' +
@@ -139,7 +135,7 @@ router.get('/reset/:token', function(req, res) {
  // User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
   User.findOne({ resetPasswordToken: req.params.token}, function(err, user) {
     if (!user) {
-      req.flash('error', 'Da! Der Schlüssel zum Zurücksetzen des Passwortes ist ungültig oder bereits abgelaufen.');
+      req.flash('error', 'Der Schlüssel zum Zurücksetzen des Passwortes ist ungültig oder bereits abgelaufen.');
       console.log("req.params.token: "+ req.params.token);
       return res.redirect('/forgot');
     }
@@ -152,7 +148,7 @@ router.post('/reset/:token', function(req, res) {
     function(done) {
       User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
         if (!user) {
-          req.flash('error', 'Hier! Der Schlüssel zum Zurücksetzen des Passwortes ist ungültig oder bereits abgelaufen.');
+          req.flash('error', 'Der Schlüssel zum Zurücksetzen des Passwortes ist ungültig oder bereits abgelaufen.');
           return res.redirect('back');
         }
         if(req.body.password === req.body.confirm) {
@@ -176,13 +172,13 @@ router.post('/reset/:token', function(req, res) {
       var smtpTransport = nodemailer.createTransport({
         service: 'Gmail', 
         auth: {
-          user: 'freizeitverein.server@gmail.com',
+          user: process.env.MAILADRESS,
           pass: process.env.GMAILSERVERPW
         }
       });
       var mailOptions = {
         to: user.email,
-        from: 'freizeitverein.server@gmail.com',
+        from: process.env.MAILADRESS,
         subject: 'Freizeitverein: Dein Passwort wurde geändert.',
         text: 'Hello,\n\n' +
           'Das ist die Bestätigung das dein Passwort für den Benutzer mit der Emailadresse ' + user.email + ' grade geändert wurde.\n'
