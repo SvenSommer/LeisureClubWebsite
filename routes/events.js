@@ -84,7 +84,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 
 
 
-//SHOW - shows more info abaut one event
+//SHOW - shows more info about one event
 router.get("/:id",middleware.isLoggedIn, function(req, res) {
     Event.findById(req.params.id).populate("comments").populate("subscribers").exec(function(err, foundEvent){
         if (err || !foundEvent) {

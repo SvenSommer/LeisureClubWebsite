@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var User = require("../models/user");
 var Event = require("../models/event");
+var Announcement =  require("../models/announcement");
 var middleware = require("../middleware");
 // ===================================
 // USER ROUTES
@@ -33,16 +34,20 @@ router.get("/:id", middleware.isLoggedIn, function(req, res) {
                     req.flash("error","Organiserte Veranstaltungen nicht gefunden!");
                     res.redirect("/");
                 }
-                Event.find().where("subscribers").equals(foundUser._id).exec(function(err, foundeventsSubscribed){
+                Event.find().where("subscribers.id").equals(foundUser._id).exec(function(err, foundeventsSubscribed){
                     if (err) {
                     req.flash("error","Veranstaltungen an denen teilgenommen wird/wurde, wurde nicht gefunden!");
                     res.redirect("/");
                     }
-                    console.log("foundeventsSubscribed: "+ foundeventsSubscribed)
-                    console.log("foundUser._id: "+ foundUser._id)
-                    res.render("users/show",{user:foundUser, 
-                                            events: foundEvents,
-                                            eventsSubscribed: foundeventsSubscribed 
+                    Announcement.find().where("author.id").equals(foundUser._id).exec(function(err, foundAnnouncements){
+                        if (err) {
+                            req.flash("error","verfasste Ankündigungen nicht gefunden!");
+                            res.redirect("/");
+                        }
+                        res.render("users/show",{user:foundUser, 
+                                                events: foundEvents,
+                                                eventsSubscribed: foundeventsSubscribed ,
+                                                announcements: foundAnnouncements});
                     });
                 });
             });

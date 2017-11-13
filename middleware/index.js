@@ -2,6 +2,7 @@
 var Event   = require("../models/event");
 var Comment = require("../models/comment");
 var User    = require("../models/user");
+var Announcement = require("../models/announcement");
 
 
 var middlewareObj = {};
@@ -17,6 +18,30 @@ middlewareObj.checkEventOwnership = function(req, res, next) {
                 } else {
                     //Does the user own the event?
                     if (foundEvent.author.id.equals(req.user._id) || req.user.isAdmin) {
+                       next();
+                    }
+                    else{
+                        req.flash("error", "Du nicht die erforderlichen Rechte das zu tun.");
+                        res.redirect("back");
+                    }
+                }
+            });
+        }else{
+           res.redirect("back");
+        }
+};
+
+//OWNS Announcement?
+middlewareObj.checkAnnouncementOwnership = function(req, res, next) {
+        if (req.isAuthenticated()) {
+            Announcement.findById(req.params.id, function(err, foundAnnouncement){
+                if (err || !foundAnnouncement) {
+                    console.log(err);
+                    req.flash("error", "Ankündigung nicht gefunden!");
+                    res.redirect("back");
+                } else {
+                    //Does the user own the event?
+                    if (foundAnnouncement.author.id.equals(req.user._id)) {
                        next();
                     }
                     else{

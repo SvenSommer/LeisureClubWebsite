@@ -49,6 +49,9 @@
     <div class="col-md-8">
         <div class="well">
             <h3>Von <%= user.username%> organisierte Veranstaltungen:</h3>
+            <div class="text-right">
+                    <a class = "btn btn-success" href="/events/new">neue Veranstaltung</a>
+                </div>
             <hr>
             <ul>
             <% events.forEach(function(event) { %>
@@ -57,6 +60,22 @@
             </ul>
         </div>
     </div>
+     <% if(user.isAdmin) { %>
+        <div class="col-md-8">
+            <div class="well">
+                <h3>Von <%= user.username%> verfasste Ankündigungen</h3>
+                <div class="text-right">
+                    <a class = "btn btn-success" href="/announcements/new">neue Ankündigung</a>
+                </div>
+                <hr>
+                <ul>
+                <% announcements.forEach(function(announcement) { %>
+                    <li><a href="/announcements/<%= announcement.id %>"><%= announcement.title %> vom <%= moment(announcement.created).format('DD. MMM YYYY') %></a></li>
+                 <% });%> 
+                </ul>
+            </div>
+        </div>
+    <% } %>
 </div>
     
 

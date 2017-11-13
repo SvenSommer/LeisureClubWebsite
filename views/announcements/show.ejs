@@ -1,0 +1,23 @@
+<% include ../partials/header %>
+<div class="row">
+    <div class="col-md-8">
+        <div class="well">
+            <h1><%= announcement.title%></h1>
+            <em>verfasst von <%= announcement.author.username%> am <%=  moment(announcement.created).format('DD. MMM YYYY') %> </em>
+            <% if(currentUser && announcement.author.id.equals(currentUser._id)){%>
+                <div class="pull-right">
+                    <a class="btn btn-xs btn-warning" href="/announcements/<%= announcement._id %>/edit">Bearbeiten</a>  
+                    <form class="delete-form" action="/announcements/<%= announcement._id %>/?_method=DELETE" method="POST">
+                        <button class="btn btn-xs btn-danger">Löschen</button>
+                    </form>
+                </div>
+            <% } %> 
+            <hr>
+            <%= announcement.text %>
+        </div>
+    </div>
+</div>
+    
+
+
+<% include ../partials/footer %>

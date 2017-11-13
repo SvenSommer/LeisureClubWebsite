@@ -16,11 +16,14 @@ var indexRoutes         = require("./routes/index"),
     commentRoutes       = require("./routes/comments"),
     subscribersRoutes   = require("./routes/subscribers"),
     eventRoutes         = require("./routes/events"),
-    usersRoutes         = require("./routes/users");
+    usersRoutes         = require("./routes/users"),
+    announcementsRoutes = require("./routes/announcements");
 
 
 // killall mongod ; cd ; ./mongod --repair ; cd data ; rm -rf mongod.lock ; cd ; ./mongod
-
+if (!process.env.SITENAME) {
+    console.log("SITENAME is not defined!");
+}  
 if (!process.env.DATABASEURL) {
     console.log("DATABASEURL is not defined!");
 }    
@@ -77,7 +80,7 @@ app.use(function(req, res, next){
    res.locals.currentUser = req.user;
    res.locals.error = req.flash("error");
    res.locals.success = req.flash("success");
-   res.locals.clubname = "[Name des Clubs]";
+   res.locals.clubname = process.env.SITENAME;
    next();
 });
 
@@ -87,6 +90,7 @@ app.use("/events", eventRoutes);
 app.use("/events/:id/comments", commentRoutes);
 app.use("/events/:id/subscribers", subscribersRoutes);
 app.use("/users", usersRoutes);
+app.use("/announcements", announcementsRoutes);
 
 
 app.listen(process.env.PORT, process.env.IP, function(){
