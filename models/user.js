@@ -18,7 +18,7 @@ var userSchema = new mongoose.Schema({
     streetAndNumber: String,
     telephone: String,
     mobil: String,
-    viewClassic: {type: Boolean, default: false},
+    viewClassic: {type: Boolean, default: true},
     created: { type: Date, default: Date.now },
     lastLogin: { type: Date, default: Date.now },
     isAdmin: {type: Boolean, default: false}
