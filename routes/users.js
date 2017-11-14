@@ -21,7 +21,7 @@ router.get("/", middleware.isLoggedIn,function(req, res){
     }).sort({"username":1});
 });
 
-//SHOW - shows more info abaut one event
+//SHOW - shows more information abaut one event
 router.get("/:id", middleware.isLoggedIn, function(req, res) {
     User.findById(req.params.id, function(err, foundUser){
         if (err || !foundUser) {
