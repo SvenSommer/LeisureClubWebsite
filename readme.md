@@ -7,6 +7,8 @@ Register with passphrase ("Codewort"): "User" for User privileges, or "Admin" fo
 
 ## Installation
 
+A detailed installation instruction is available as a [blogpost on my website](http://robstechlog.com/2017/11/14/run-website-organize-upcoming-events/).
+
 Clone this repository:
 ````
 git clone https://github.com/SvenSommer/LeisureClubWebsite.git
@@ -24,7 +26,8 @@ See intall instructions (here)[http://mongodb.github.io/node-mongodb-native/2.0/
 
 Some enviroment variables are needed:
 
-* <strong>DATABASEURL</strong> - URL to the databse  default:mongodb://localhost/leisureclub 
+* <strong>DATABASEURL</strong> - URL to the databse  default:mongodb://localhost/leisureclub
+* <strong>SITENAME</strong> – The name of your Website. It appears at several locations, e.g. in the navbar.
 * <strong>PASSWORDSECRET</strong> - Passphrase to ensure password authentication.
 * <strong>MAILADRESS</strong> - Password reset works with a googlemail account. Mailadress is needed.
 * <strong>GMAILSERVERPW</strong> - Password reset works with a googlemail account. Password is needed.
