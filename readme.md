@@ -1,9 +1,7 @@
 # LeisureClub Website
-A website for elderly/seniors to create and subscribe to events.
+Run a simple and free website to organize events, parties or other happenings with more participants. Easily monitor and inform your subscribers. Let everybody stay in touch and keep an overview of the number of participants.
 A Testversion is available here: [LeisureClub](https://leisureclub-demo.herokuapp.com/login).<br>
 Register with passphrase ("Codewort"): "User" for User privileges, or "Admin" for Admin privileges
-
-
 
 ## Installation
 
