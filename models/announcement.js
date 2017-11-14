@@ -8,14 +8,15 @@ var announcementSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
-        username: String()
+        username: String
     },
     accepted: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
-        date: {type: Date, default: Date.now}
+        date: {type: Date, default: Date.now},
+        username: String
     }],
     created: {type: Date, default: Date.now}
 });

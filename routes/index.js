@@ -43,7 +43,7 @@ router.post("/register",function(req, res) {
             return res.render("register", {error: err.message});
         }
         passport.authenticate("local")(req, res, function(){
-            req.flash("success", "Willkommen beim Freizeitverein " + user.username);
+            req.flash("success", "Herzlich Willkommen " + user.username + " beim der lustigen Truppe." );
             res.redirect("/events");       
         });
     });

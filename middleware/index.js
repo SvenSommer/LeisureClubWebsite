@@ -41,7 +41,7 @@ middlewareObj.checkAnnouncementOwnership = function(req, res, next) {
                     res.redirect("back");
                 } else {
                     //Does the user own the event?
-                    if (foundAnnouncement.author.id.equals(req.user._id)) {
+                    if (foundAnnouncement.author.id.equals(req.user._id) && req.user.isAdmin){
                        next();
                     }
                     else{
@@ -113,6 +113,15 @@ middlewareObj.isLoggedIn = function isLoggedIn(req, res, next){
     req.flash("error", "Du musst dich erst einloggen!");
 
     res.redirect("/login");
+};
+
+//IS Admin?
+middlewareObj.isAdmin = function isAdmin(req, res, next){
+    if (req.user.isAdmin) {
+        return next();
+    }    
+    req.flash("error", "Du hast nicht die erforderlichen Rechte das zu tun!");
+    res.redirect("back");
 };
 
 

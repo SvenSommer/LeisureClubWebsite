@@ -1,7 +1,7 @@
-
 var express = require("express");
 var router = express.Router();
 var Event = require("../models/event");
+var Announcement =  require("../models/announcement");
 var middleware = require("../middleware");
 var geocoder = require('geocoder');
 // ===================================
@@ -16,9 +16,17 @@ router.get("/", middleware.isLoggedIn, function(req, res){
             console.log(err);
         }
         else {
-            res.render("events/index", {events: events, page: 'events'});
+            Announcement.find().sort({"created":1}).exec(function(err, foundAnnouncements){
+            if (err) {
+                req.flash("error","verfasste Ankündigungen nicht gefunden!");
+                res.redirect("/");
+            }
+            res.render("events/index", {events: events, 
+                                    page: 'events',
+                                    announcements: foundAnnouncements});
+            });
         }
-    })
+    });
 });
 
 //CREATE - add new event to DB

@@ -1,12 +1,25 @@
 <% include ../partials/header %>
-    <header class=jumbotron>
-        <div class="container">
-            <h2>Bevorstehende Veranstaltungen</h2>
-            <p>
-                <a class="btn btn-success btn-lg" href="/events/new">Neue Veranstaltung hinzufügen</a>
-            </p>
-        </div>
-    </header>
+    <%announcements.forEach(function(announcement) { %>
+        <% var hasAccepted = false;
+        announcement.accepted.forEach(function(accepter){ %>
+            <% if(currentUser && accepter.id.equals(currentUser.id)){ hasAccepted = true;}%>
+        <% }); %>
+        <% if(!hasAccepted){%>
+            <div class=jumbotron>
+                <div class="container">
+                    <h2><a href="/announcements/<%= announcement.id %>"><%= announcement.title %> vom <%= moment(announcement.created).format('DD. MMM YYYY') %></a></h2>
+                    <p>
+                        <%= announcement.text %>
+                     </p>
+                    <hr>
+                    <form  action="/announcements/<%=announcement.id %>/accept" method="POST">
+                        <button class="btn btn-success btn-lg">Kenntnissnahme bestätigen</button>
+                    </form>
+                </div>
+            </div>
+        <% } %>
+    <% });%> 
+   
     
 
 <%
@@ -25,7 +38,7 @@ var maxDate=new Date(Math.max.apply(null,tdates));
 //generate genMonths
 var genMonths = [];
 var date = new Date();
-var endDate = maxDate.setMonth(maxDate.getMonth() + 1);
+var endDate = maxDate.setMonth(maxDate.getMonth());
 var monthNameList = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
 while (date <= endDate)
 {
@@ -39,6 +52,7 @@ while (date <= endDate)
     date.setMonth(date.getMonth() + 1);
 }
 %>
+<h1>Veranstaltungen</h1>
 <% var viewClassic = currentUser.viewClassic; %>
 
 <!--CLASSIC VIEW-->

@@ -14,6 +14,40 @@
             <% } %> 
             <hr>
             <%= announcement.text %>
+            <hr>
+            <% var hasAccepted = false;
+            announcement.accepted.forEach(function(accepter){ %>
+                <% if(currentUser && accepter.id.equals(currentUser.id)){ hasAccepted = true;}%>
+            <% }); %>
+            <% if(!hasAccepted){%>
+                <form  action="/announcements/<%=announcement.id %>/accept" method="POST">
+                    <button class="btn btn-success btn-lg">Kenntnissnahme bestätigen</button>
+                </form>
+            <% } %>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <h3>Zur Kenntnis genommen von</h3>
+            <hr>
+            <div class="table-responsive">          
+                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Datum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% announcement.accepted.forEach(function(accepter){ %>
+                            <tr>
+                                <td><%=accepter.username%></td>
+                                <td><%=moment(accepter.date).fromNow()%></td>
+                            </tr>
+                        <% });%>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
