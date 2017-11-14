@@ -30,7 +30,6 @@ router.get("/new", middleware.isAdmin,  function(req,res){
 
 //ANNOUNCEMENT CREATE
 router.post("/", middleware.isAdmin, function(req,res){
-    console.log("Announcement received!");
     Announcement.create(req.body.announcement, function(err, announcement) {
         if (err) {
             req.flash("error", "Da ist etwas schief gelaufen.");
@@ -115,9 +114,7 @@ router.post("/:id/accept", middleware.isLoggedIn, function(req, res){
             res.redirect("back");
         } else {
             foundAnnouncement.accepted.push({id:req.user._id, username: req.user.username}); 
-            console.log( foundAnnouncement);
             foundAnnouncement.save();
-            console.log(req.user.username + "("+ req.user.id +") has accepted announcement " + req.params.id);
             res.redirect("back");
             }
             

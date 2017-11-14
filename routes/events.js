@@ -100,7 +100,6 @@ router.get("/:id",middleware.isLoggedIn, function(req, res) {
             res.redirect("back");
             console.log(err);
         } else {
-            console.log(foundEvent);
             res.render("events/show",{event:foundEvent}); 
         }
     });
@@ -118,8 +117,6 @@ router.get("/:id/edit", middleware.checkEventOwnership, function(req, res) {
 //UPDATE ROUTE
 router.put("/:id", middleware.checkEventOwnership, function(req,res){
     //req.body = req.sanitize(req.body);
-    console.log("req.body.description:" +  req.body.description);
-    console.log("req.body.location:" +  req.body.location);    
     geocoder.geocode(req.body.location, function (err, data) {
         var lat = "";
         var lng = "";
@@ -145,9 +142,6 @@ router.put("/:id", middleware.checkEventOwnership, function(req,res){
         maxSubscribers : req.body.maxSubscribers,
         fee: req.body.fee
     };
-    console.log("newData:" +  newData);
-
-    
     Event.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, campground){
         if(err){
             req.flash("error", err.message);

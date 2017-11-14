@@ -73,7 +73,6 @@ router.delete("/:subscriber_id", function(req, res){
         } else  {
             var cDate = new Date();
             var dDate = new Date(foundevent.deadline);
-            console.log("dDate" + dDate);
             if(moment(cDate).isAfter(dDate) &&  !req.user.isAdmin){
                 req.flash("error", "Die Anmeldefrist und damit auch Abmeldefrist für diese Veranstaltung ist bereits abgelaufen!");
                 res.redirect("back");  

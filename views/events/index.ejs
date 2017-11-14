@@ -7,7 +7,8 @@
         <% if(!hasAccepted){%>
             <div class=jumbotron>
                 <div class="container">
-                    <h2><a href="/announcements/<%= announcement.id %>"><%= announcement.title %> vom <%= moment(announcement.created).format('DD. MMM YYYY') %></a></h2>
+                    <h2><a href="/announcements/<%= announcement.id %>"><%= announcement.title %></a></h2>
+                    <h5>verfasst von <%=announcement.author.username %> am <%= moment(announcement.created).format('DD. MMM YYYY') %><h5>
                     <p>
                         <%= announcement.text %>
                      </p>
