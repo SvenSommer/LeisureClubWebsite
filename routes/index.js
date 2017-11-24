@@ -39,7 +39,6 @@ router.post("/register",function(req, res) {
 
     User.register(newUser, req.body.password, function(err, user){
         if(err){
-            console.log(err);
             return res.render("register", {error: err.message});
         }
         passport.authenticate("local")(req, res, function(){
@@ -120,7 +119,6 @@ router.post('/forgot', function(req, res, next) {
           'Falls du diese Anfrage nicht verschickt hast, ignoriere bitte diese Email und alles bleibt unverändert.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
-        console.log('mail sent. token: ' + token );
         req.flash('success', 'Eine Email zur Wiederherstellung des Passwortes wurde an ' + user.email + ' versendet.');
         done(err, 'done');
       });
@@ -136,7 +134,6 @@ router.get('/reset/:token', function(req, res) {
   User.findOne({ resetPasswordToken: req.params.token}, function(err, user) {
     if (!user) {
       req.flash('error', 'Der Schlüssel zum Zurücksetzen des Passwortes ist ungültig oder bereits abgelaufen.');
-      console.log("req.params.token: "+ req.params.token);
       return res.redirect('/forgot');
     }
     res.render('reset', {token: req.params.token});

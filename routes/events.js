@@ -29,7 +29,9 @@ router.get("/", middleware.isLoggedIn, function(req, res){
     });
 });
 
-//CREATE - add new event to DB
+
+
+// add new event to DB
 router.post("/", middleware.isLoggedIn, function(req,res){
     
    // req.body.event.body = req.sanitize(req.body.event.body);

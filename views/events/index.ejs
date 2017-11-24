@@ -39,7 +39,7 @@ var maxDate=new Date(Math.max.apply(null,tdates));
 //generate genMonths
 var genMonths = [];
 var date = new Date();
-var endDate = maxDate.setMonth(maxDate.getMonth());
+var endDate = maxDate.setMonth(maxDate.getMonth()+1);
 var monthNameList = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
 while (date <= endDate)
 {
