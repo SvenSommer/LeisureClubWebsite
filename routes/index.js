@@ -30,9 +30,11 @@ router.post("/register",function(req, res) {
     });
     if (req.body.passphrase === process.env.ADMINPASSPHRASE) {
         newUser.isAdmin = true;
+        newUser.isActive = true;
     }
     else if (req.body.passphrase === process.env.USERPASSPHRASE) {
         newUser.isAdmin = false;
+        newUser.isActive = false;
     } else {
         return res.render("register", {error: "Codeword nicht erkannt!"});   
     }

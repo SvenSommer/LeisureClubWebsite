@@ -6,7 +6,7 @@
         <form  action="/events" method="POST">
             <div class="form-group">
                 <label for="title">Veranstaltungstitel</label>
-                <input class="form-control" type="text" name="title" placeholder="Veranstaltungstitel">
+                <input class="form-control" type="text" name="title" placeholder="Veranstaltungstitel" required>
             </div>
             <div class="form-group">
                 <label for="image">Bildadresse</label>
@@ -14,27 +14,27 @@
             </div>
             <div class="field">
                 <label>Beschreibung</label>
-                <textarea class="form-control" name="description" rows="10"></textarea>
+                <textarea class="form-control" name="description" rows="10" required></textarea>
             </div>
             <div class="form-group">
                 <label for="location">Ort</label>
-                <input class="form-control" type="text" name="location" id="location" placeholder="Strausberg Bahnhof">
+                <input class="form-control" type="text" name="location" id="location" placeholder="Strausberg Bahnhof" required>
             </div>
             <div class="form-group">
                 <label for="meetingpoint">Treffpunkt</label>
-                <input class="form-control" type="text" name="meetingpoint" placeholder="Treffpunkt">
+                <input class="form-control" type="text" name="meetingpoint" placeholder="Treffpunkt" required>
             </div>
             <div class="form-group">
                 <label for="date">Datum</label>
-                <input class="form-control" type="date" name="date" placeholder="Datum">
+                <input class="form-control" type="date" name="date" placeholder="Datum" required>
             </div>
             <div class="form-group">
                 <label for="time">Zeit</label>
-                <input class="form-control" type="time" name="time" placeholder="Zeit">
+                <input class="form-control" type="time" name="time" placeholder="Zeit" required>
             </div>
             <div class="form-group">
                 <label for="deadline">Anmeldeschluss</label>
-                <input class="form-control" type="date" name="deadline" placeholder="Anmeldeschluss">
+                <input class="form-control" type="date" name="deadline" placeholder="Anmeldeschluss" required>
             </div>
             <div class="form-group">
                 <label for="maxSubscribers">Maximale Teilnehmeranzahl</label>

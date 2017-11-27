@@ -21,7 +21,7 @@ router.get("/", middleware.isLoggedIn,function(req, res){
     }).sort({"username":1});
 });
 
-//SHOW - shows more information abaut one event
+//SHOW - shows more information about one event
 router.get("/:id", middleware.isLoggedIn, function(req, res) {
     User.findById(req.params.id, function(err, foundUser){
         if (err || !foundUser) {
@@ -63,6 +63,8 @@ router.get("/:id/edit", middleware.checkUserOwnership, function(req, res) {
     });
 });
 
+
+
 //UPDATE - Update info
 router.put("/:id",middleware.checkUserOwnership, function(req, res){
     if (!req.body.user.viewClassic) {
@@ -95,6 +97,24 @@ router.delete("/:id",middleware.checkUserOwnership, function(req, res){
             res.redirect("/users");
             
         }
+    });
+});
+
+//Toogle Active - toogle active status
+router.get("/:id/toggle_active", middleware.isAdmin, function(req, res) {
+    User.findById(req.params.id, function(err, foundUser){
+        if (err) {
+            console.log(err);
+        }
+        if (foundUser.isActive) {
+            foundUser.isActive = false;
+            req.flash('success', foundUser.username + ' wurde gesperrt!');
+        } else {
+            foundUser.isActive = true;
+            req.flash('success', foundUser.username + ' wurde freigeschaltet!');
+        }
+        foundUser.save();
+        res.redirect("/users/");
     });
 });
 

@@ -107,17 +107,21 @@ middlewareObj.checkUserOwnership = function(req, res, next) {
     
 //IS Logged in?
 middlewareObj.isLoggedIn = function isLoggedIn(req, res, next){
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated() && req.user.isActive) {
         return next();
-    }    
-    req.flash("error", "Du musst dich erst einloggen!");
-
-    res.redirect("/login");
+    } else if(!req.isAuthenticated()){
+        req.flash("error", "Du musst dich erst einloggen!");
+        res.redirect("/login");
+    } else if(!req.user.isActive){
+        req.flash("error", "Dein Account ist noch nicht freigeschaltet. Bitte wende dich an einen Administrator!");
+        res.redirect("/login");
+    }
+   
 };
 
 //IS Admin?
 middlewareObj.isAdmin = function isAdmin(req, res, next){
-    if (req.user.isAdmin) {
+    if (req.isAuthenticated() && req.user.isAdmin) {
         return next();
     }    
     req.flash("error", "Du hast nicht die erforderlichen Rechte das zu tun!");

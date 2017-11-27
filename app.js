@@ -21,6 +21,7 @@ var indexRoutes         = require("./routes/index"),
 
 
 // killall mongod ; cd ; ./mongod --repair ; cd data ; rm -rf mongod.lock ; cd ; ./mongod
+// . init.sh
 if (!process.env.SITENAME) {
     console.log("SITENAME is not defined!");
 }  
