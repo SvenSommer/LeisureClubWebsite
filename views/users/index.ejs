@@ -8,6 +8,7 @@
                 <th>Benutzername</th>
                 <th>Vorname</th>
                 <th>Nachname</th>
+                <th>Geburtsdatum</th>
                 <th>Email</th>
                 <th>Telefonnummer</th>
                 <th>Mobil</th>
@@ -22,6 +23,10 @@
                 <td><a href="/users/<%= user._id %>"><%= user.username %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.firstname %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.lastname %></a></td>
+                <td><a href="/users/<%= user._id %>">
+                    <% if(user.birthday) { %> 
+                        <%=moment(user.birthday).format('DD. MM. YYYY') %></a></td>
+                    <% } %>
                 <td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.telephone %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.mobil %></a></td>
