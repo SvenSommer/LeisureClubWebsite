@@ -4,6 +4,8 @@ var Event = require("../models/event");
 var Announcement =  require("../models/announcement");
 var middleware = require("../middleware");
 var geocoder = require('geocoder');
+var moment   = require('moment');
+
 // ===================================
 // EVENT ROUTES
 // ===================================
@@ -40,9 +42,10 @@ router.post("/", middleware.isLoggedIn, function(req,res){
     var image =  req.body.image;
     var description =req.body.description;
     var meetingpoint =req.body.meetingpoint;
-    var date =req.body.date;
+    var date =  moment(req.body.date, "DD.MM.YYYY", 'de').format('YYYY-MM-DD');
+    console.log("date: " + date);
     var time =req.body.time;
-    var deadline =req.body.deadline;
+    var deadline = moment(req.body.deadline, "DD.MM.YYYY", 'de').format('YYYY-MM-DD');
     var maxSubscribers = req.body.maxSubscribers;
     var fee =req.body.fee;
     var author = {
@@ -128,7 +131,8 @@ router.put("/:id", middleware.checkEventOwnership, function(req,res){
             lng = data.results[0].geometry.location.lng;
             location = data.results[0].formatted_address;
         }
-
+    console.log("req.body.date: " + req.body.date);
+    console.log("req.body.deadline: " + req.body.deadline);
     var newData = 
     {
         title: req.body.title, 
@@ -138,12 +142,15 @@ router.put("/:id", middleware.checkEventOwnership, function(req,res){
         lat: lat, 
         lng: lng,
         meetingpoint: req.body.meetingpoint, 
-        date: req.body.date, 
+        date : moment(req.body.date, "DD.MM.YYYY", 'de').format('YYYY-MM-DD'),
         time: req.body.time, 
-        deadline: req.body.deadline, 
+        deadline: moment(req.body.deadline, "DD.MM.YYYY", 'de').format('YYYY-MM-DD'), 
         maxSubscribers : req.body.maxSubscribers,
         fee: req.body.fee
     };
+    console.log("newData.date: " + newData.date);
+    console.log("newData.deadline: " + newData.deadline);
+    
     Event.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, campground){
         if(err){
             req.flash("error", err.message);
