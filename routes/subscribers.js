@@ -52,7 +52,8 @@ router.post("/", middleware.isLoggedIn, function(req,res){
                         
                         req.flash("success", "Du hast dich erfolgreich für " + foundevent.title + " angemeldet!");
                        // res.redirect("/events/" + foundevent._id);
-                       res.redirect("back");   
+                      // res.redirect("back");   
+                       res.redirect("/events#"+foundevent.id);   
                             
                     }
                     
@@ -85,7 +86,8 @@ router.delete("/:subscriber_id", function(req, res){
                     {
                         req.flash("success", "Erfolgreich abgemeldet!");
                        // res.redirect("/events/"+ req.params.id);
-                        res.redirect("back");   
+                       // res.redirect("back"); 
+                        res.redirect("/events#"+foundevent.id);   
                     }
                 });
             }

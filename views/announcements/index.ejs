@@ -15,7 +15,7 @@
         <tbody>
             <% announcements.forEach(function(announcement){ %>
             <tr>
-                <td><%= moment(announcement.date).format('DD. MMM YYYY') %></td>
+                <td><%= moment(announcement.created).format('DD. MMM YYYY') %></td>
                 <td><a href="/announcements/<%= announcement._id %>"><%= announcement.title %></a></td>
                 <td><%= announcement.text %></td>
                 <td><%= announcement.author.username %></td>

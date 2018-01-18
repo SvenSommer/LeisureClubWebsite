@@ -70,7 +70,7 @@ while (date <= endDate)
                                 <th>Datum</th>
                                 <th>Beschreibung</th>
                                 <th>Anmeld.</th>
-                                <th>Bearb.</th>
+                                <th>Unkosten</th>
                                 <th>angmeldet sind</th>
                                 <th>Aktion</th>
                             </tr>
@@ -79,7 +79,7 @@ while (date <= endDate)
                             <% events.forEach(function(event){ %>
                                 <% if(moment(event.date).format('MMM_YYYY').replace('.', '') == month.compareDate) { %>
                                     <tr>
-                                        <td><%= moment(event.date).format('DD.MM.YYYY dddd') %></td>
+                                        <td><a id="<%=event.id%>"></a><%= moment(event.date).format('DD.MM.YYYY dddd') %>,</br><%=event.time %> Uhr</td>
                                         <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
                                         <td><a href="/events/<%= event._id %>"><%= moment(event.deadline).format('DD.MM.') %></a></td>
                                         <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>

@@ -5,11 +5,11 @@
         <form  action="/events" method="POST">
             <div class="form-group">
                 <label for="title">Veranstaltungstitel</label>
-                <input class="form-control" type="text" name="title" placeholder="Veranstaltungstitel" required>
+                <input class="form-control" type="text" name="title" placeholder="Bitte den Veranstaltungstitel eingeben" required>
             </div>
             <div class="form-group">
-                <label for="image">Bildadresse</label>
-                <input class="form-control" type="text" name="image" placeholder="Bild">
+                <label for="image">Bildadresse (optional)</label>
+                <input class="form-control" type="text" name="image" placeholder="Eine Bildadresse kann hier hinterlegt werden">
             </div>
             <div class="field">
                 <label>Beschreibung</label>
@@ -17,11 +17,11 @@
             </div>
             <div class="form-group">
                 <label for="location">Ort</label>
-                <input class="form-control" type="text" name="location" id="location" placeholder="Strausberg Bahnhof" required>
+                <input class="form-control" type="text" name="location" id="location" placeholder="Bitte die Adresse der Veranstaltung eingeben" required>
             </div>
             <div class="form-group">
                 <label for="meetingpoint">Treffpunkt</label>
-                <input class="form-control" type="text" name="meetingpoint" placeholder="Treffpunkt" required>
+                <input class="form-control" type="text" name="meetingpoint" placeholder="Bitte den Treffpunkt eingeben" required>
             </div>
             <div class="form-group">
                 <label for="date">Datum</label>  
@@ -30,7 +30,7 @@
                 <i class="fa fa-calendar">
                 </i>
                </div>
-               <input class="form-control" id="date" type="text" name="date" placeholder="Datum" required>
+               <input class="form-control" id="date" type="text" name="date" placeholder="Bitte das Datum der Veranstaltung auswählen" required>
               </div>
             </div>
                         <div class="form-group">
@@ -40,26 +40,26 @@
                         <i class="fa fa-clock-o">
                         </i>
                     </div>
-                    <input class="form-control" type="time" name="time" placeholder="Zeit" required>
+                    <input class="form-control" type="time" name="time" placeholder="Bitte die Zeit für das Zusammenkommen am Treffpunkt eingeben" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="deadline">Anmeldeschluss</label>
+                <label for="deadline">Anmeldeende</label>
                 <div class="input-group">
                    <div class="input-group-addon">
                         <i class="fa fa-calendar"> </i>
                    </div>
-                   <input class="form-control" id="date" type="text" name="deadline" placeholder="Anmeldeschluss" required>
+                   <input class="form-control" id="date" type="text" name="deadline" placeholder="Bitte das Datum für das Anmeldeende auswählen" required>
                 </div>
             </div>
             <div class="form-group">
                 <label for="maxSubscribers">Maximale Teilnehmeranzahl</label>
-                <input class="form-control" type="number" name="maxSubscribers" placeholder="12" step ="1"  min="3">
+                <input class="form-control" type="number" name="maxSubscribers" placeholder="Bitte die maximale Teilnehmeranzahl auswählen" step ="1"  min="3">
             </div>
             <div class="form-group">
-                <label for="fee">Bearbeitungsgebühr</label>
-                <input class="form-control" type="text" name="fee" placeholder="3.00 €">
+                <label for="fee">Unkosten</label>
+                <input class="form-control" type="text" name="fee" placeholder="Bitte den Unkostenbeitrag festlegen">
             </div>
             <div class="form-group">
                <button class="btn btn-lg btn-primary btn-block">Speichern</button>
