@@ -4,9 +4,11 @@
        
     </div>
     <div class="col-md-3">
+        <% if(event.image != "") {%>
         <div class="thumbnail">
             <img class="img-responsive" src="<%=event.image%>">
         </div>
+        <% }%>
         <div id="map"></div>
     </div>
         <div class="col-md-9">

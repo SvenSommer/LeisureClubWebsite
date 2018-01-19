@@ -56,12 +56,49 @@ router.get("/login", function(req,res){
    res.render("login", {page: 'login'});
 });
 
+/*
 //HANDLING LOGIN LOGIC
 router.post("/login", passport.authenticate("local",
     {
         successRedirect: "/events",
         failureRedirect: "/login"
     }),  function(req, res) {
+      
+});
+*/
+
+/* POST login page. */
+router.post('/login', function(req, res, next) {
+    passport.authenticate('local', { 
+        successRedirect: "/events",
+        failureRedirect: "/login"
+    }, function(err, user, info) {
+        if(err) {
+            console.log(err);
+            req.flash("error","Error1");
+            return res.redirect("/login");
+        }
+
+        if(!user) {
+            req.flash("error","Benutzername oder Passwort ist nicht richtig!");
+            return res.redirect("/login");
+        }
+        return req.logIn(user, function(err) {
+            if(err) {
+              req.flash("error","Error2");
+              return res.redirect("/login");
+            } 
+            console.log("User " + req.user.username + " last login:" + Date.now());
+
+            User.findOneAndUpdate({'username': req.user.username}, {lastLogin: Date.now()}, {new: true}, function(err, user) {
+              if (err) {
+                  console.log(err);
+              }
+            });
+            req.flash("success","Willkommen zurück " + user.firstname + "!");
+            return res.redirect("/events");
+        });
+    })(req, res, next);
 });
 
 //LOGOUT ROUTE

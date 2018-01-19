@@ -13,7 +13,8 @@
                 <th>Telefonnummer</th>
                 <th>Mobil</th>
                 <% if(currentUser.isAdmin) { %>
-                <th>Legitimiation</th>
+                <th>letzter Login</th>
+                <th>Status</th>
                 <% } %>
             </tr>
         </thead>
@@ -30,16 +31,21 @@
                 <td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.telephone %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.mobil %></a></td>
-                <td>
-                    <% if(user.isActive && !user.isAdmin && currentUser.isAdmin) { %>
-                        <a class="btn btn-xs btn-danger" href="/users/<%= user._id %>/toggle_active">sperren</a>
-                    <% } else if(currentUser.isAdmin && !user.isAdmin) {%>
-                        <a class="btn btn-xs btn-success" href="/users/<%= user._id %>/toggle_active">freischalten</a>
-                    <% } else if(currentUser.isAdmin){ %>
-                        Administrator
-                    <% } %>
-                    
-                </td>
+                <% if(currentUser.isAdmin) {  %>
+                    <td>
+                        <%= moment(user.lastLogin).utcOffset(60).format("DD.MM.YYYY HH:mm") %>
+                    </td>
+                    <td>
+                            <% if(user.isActive && !user.isAdmin) { %>
+                                <a class="btn btn-xs btn-danger" href="/users/<%= user._id %>/toggle_active">sperren</a>
+                            <% } else if( !user.isAdmin) {%>
+                                <a class="btn btn-xs btn-success" href="/users/<%= user._id %>/toggle_active">freischalten</a>
+                            <% } else { %>
+                                Administrator
+                            <% } %>
+                    </td>
+                   
+                <% } %>
             </tr>
             <% }); %>
         </tbody>

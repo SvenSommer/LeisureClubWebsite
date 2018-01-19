@@ -1,20 +1,16 @@
-TODO
+Umgesetzt
+* event/index Anzahl der Kommentare wird ebenfalls in der Übersicht aufgeführt
+* Platzhalter für ein Bild einer Veranstaltung wird nur angezeigt, wenn auch ein Bild hinterlegt wurde
+* Letzter Login Zeitpunkt wird den Administratoren in der Übersichtsseite der Mitglieder angezeigt.
+* Verbesserung der Fehlermeldungen bei vergeblichen Einlogg Versuchen
+
+TODO Ideen
 * event/new  Bild hochladen
 * event/edit Bild hochladen
-
-* event/show Karte anzeigen!?
 * event/show Bilder hochladen
-
-
-
 * event/index vergangene Veranstaltungen ansehen
-* event/index Details button unten fixieren
-
-
 * user/login Zeitpunkt speichern
-
 * user/show last loginzeit anzeigen
-
 * user/show teilnehmende veranstaltungen des Benutzers
 
  
