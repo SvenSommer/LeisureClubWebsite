@@ -38,7 +38,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
                     var cDate = new Date();
                     var dDate = new Date(foundevent.deadline);
                     if(moment(cDate).isAfter(dDate) && !req.user.isAdmin){
-                        req.flash("error", "Die Anmeldefrist für diese Veranstaltung ist bereits abgelaufen!");
+                        req.flash("error", "Das Anmeldeende für diese Veranstaltung ist bereits erreicht!");
                         //res.redirect("/events/" + foundevent._id);
                         res.redirect("back");  
                     } else {                    
@@ -50,7 +50,7 @@ router.post("/", middleware.isLoggedIn, function(req,res){
                         foundevent.subscribers.push(subscriber);
                         foundevent.save();
                         
-                        req.flash("success", "Du hast dich erfolgreich für " + foundevent.title + " angemeldet!");
+                        req.flash("success", "Du hast dich erfolgreich für die Veranstaltung" + foundevent.title + " angemeldet!");
                        // res.redirect("/events/" + foundevent._id);
                       // res.redirect("back");   
                        res.redirect("/events#"+foundevent.id);   
@@ -75,7 +75,7 @@ router.delete("/:subscriber_id", function(req, res){
             var cDate = new Date();
             var dDate = new Date(foundevent.deadline);
             if(moment(cDate).isAfter(dDate) &&  !req.user.isAdmin){
-                req.flash("error", "Die Anmeldefrist und damit auch Abmeldefrist für diese Veranstaltung ist bereits abgelaufen!");
+                req.flash("error", "Das Anmeldeende für diese Veranstaltung ist bereits erreicht!");
                 res.redirect("back");  
                 //res.redirect("/events/" + foundevent._id);
             } else { 
@@ -84,7 +84,7 @@ router.delete("/:subscriber_id", function(req, res){
                          res.redirect("back");  
                     } else
                     {
-                        req.flash("success", "Erfolgreich abgemeldet!");
+                        req.flash("success", "Du hast dich erfolgreich für die Veranstaltung " + foundevent.title + " abgemeldet!");
                        // res.redirect("/events/"+ req.params.id);
                        // res.redirect("back"); 
                         res.redirect("/events#"+foundevent.id);   

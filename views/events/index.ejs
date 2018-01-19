@@ -71,6 +71,7 @@ while (date <= endDate)
                                 <th>Beschreibung</th>
                                 <th>Anmeld.</th>
                                 <th>Unkosten</th>
+                                <th>Kommentare</th>
                                 <th>angmeldet sind</th>
                                 <th>Aktion</th>
                             </tr>
@@ -83,6 +84,7 @@ while (date <= endDate)
                                         <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
                                         <td><a href="/events/<%= event._id %>"><%= moment(event.deadline).format('DD.MM.') %></a></td>
                                         <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>
+                                        <td><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
                                         <td>
                                             <% event.subscribers.forEach(function(subscriber){ %>
                                                 <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>
