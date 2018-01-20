@@ -43,6 +43,12 @@ if (!process.env.USERPASSPHRASE) {
 if (!process.env.ADMINPASSPHRASE) {
     console.log("ADMINPASSPHRASE is not defined!");
 }  
+if (!process.env.CLOUDINARY_API_KEY) {
+    console.log("CLOUDINARY_API_KEY is not defined!");
+}  
+if (!process.env.CLOUDINARY_API_SECRET) {
+    console.log("CLOUDINARY_API_SECRET is not defined!");
+}  
 
 
 
@@ -82,6 +88,7 @@ app.use(function(req, res, next){
    res.locals.error = req.flash("error");
    res.locals.success = req.flash("success");
    res.locals.clubname = process.env.SITENAME;
+   res.locals.clubname_gen = process.env.CLUBNAME_GENITIV || process.env.SITENAME;
    next();
 });
 

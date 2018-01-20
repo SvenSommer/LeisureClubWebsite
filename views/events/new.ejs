@@ -2,14 +2,14 @@
 <div class="row">
     <h1 style="text-align: center;"> Erstelle eine neue Veranstaltung</h1>
     <div style="width: 30%; margin: 25px auto;">
-        <form  action="/events" method="POST">
+        <form  action="/events" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="title">Veranstaltungstitel</label>
                 <input class="form-control" type="text" name="title" placeholder="Bitte den Veranstaltungstitel eingeben" required>
             </div>
             <div class="form-group">
-                <label for="image">Bildadresse (optional)</label>
-                <input class="form-control" type="text" name="image" placeholder="Eine Bildadresse kann hier hinterlegt werden">
+                <label for="image">Bild hochladen (optional)</label>
+                <input class="form-control" type="file" id="image" name="image" accept="image/*" placeholder="Eine klann ein Bild hinterlegt werden" required>
             </div>
             <div class="field">
                 <label>Beschreibung</label>

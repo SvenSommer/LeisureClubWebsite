@@ -27,7 +27,7 @@
                 </div>
                 <div class="caption">
                      <!--Details!-->
-                    <p><%=event.description%></p>
+                    <p><%=event.description.replace(/\n/g, '<br/>')%></p>
                      <p>
                         <em>erstellt von <a href="/users/<%= event.author.id %>"><%=event.author.username%></a>, <%= moment(event.created).fromNow() %></em>
                     </p>
@@ -124,34 +124,35 @@
 
              <!-- Comments !-->
             <div class="well">
-                <div class="text-right">
-                    <a class = "btn btn-success" href="/events/<%= event._id %>/comments/new">Kommentar schreiben</a>
-                </div>
-                <hr>
-                <% event.comments.forEach(function(comment){ %>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <strong><%= comment.author.username %></strong>
-                            <span class="pull-right"><%= moment(comment.created).fromNow() %></span>
-                            <div>
-                                <%= comment.text %>
-                                <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
-                                    <div class="pull-right">
-                                        <a class="btn btn-xs btn-warning" href="/events/<%= event._id %>/comments/<%= comment._id %>/edit">Bearbeiten</a>  
-                                        <form class="delete-form" action="/events/<%= event._id %>/comments/<%= comment._id %>/?_method=DELETE" method="POST">
-                                            <button class="btn btn-xs btn-danger">Kommentar löschen</button>
-                                        </form>
-                                    </div>
-                                <% } %> 
-                                <hr>
-                            </div>
-                        </div>
-                    </div>
-                <% })%>
+                <div class="table-responsive">          
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Kommentare</th>
+                                <th style="text-align: right">
+                                    <a class = "btn btn-success" href="/events/<%= event._id %>/comments/new">Kommentar schreiben</a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% event.comments.forEach(function(comment){ %>
+                                <tr>
+                                    
+                                    <td><strong><%= comment.author.username %></strong></br><%= comment.text %></td>
+                                    <td style="text-align: right"><%= moment(comment.created).fromNow() %></br>
+                                        <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
+                                            <a class="btn btn-xs btn-warning" href="/events/<%= event._id %>/comments/<%= comment._id %>/edit">Bearbeiten</a>  
+                                            <form class="delete-form" action="/events/<%= event._id %>/comments/<%= comment._id %>/?_method=DELETE" method="POST">
+                                                <button class="btn btn-xs btn-danger">Kommentar löschen</button>
+                                            </form>
+                                        <% } %> 
+                                    </td>
+                                </tr>     
+                            <% })%>
+                        </tbody>
+                    </table>
+                </div>  
             </div>
-        </div>    
-    </div>  
-</div>
 <script>
   function initMap() {
     var lat = <%= event.lat %>;

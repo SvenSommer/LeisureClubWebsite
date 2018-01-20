@@ -4,6 +4,34 @@ var User = require("../models/user");
 var Event = require("../models/event");
 var Announcement =  require("../models/announcement");
 var middleware = require("../middleware");
+var multer = require('multer');
+var cloudinary = require('cloudinary');
+
+// ===================================
+// IMAGE UPLOAD
+// ===================================
+var storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+
+var imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Es sind nur Bilddateien erlaubt!'), false);
+    }
+    cb(null, true);
+};
+
+var upload = multer({ storage: storage, fileFilter: imageFilter})
+
+
+cloudinary.config({ 
+  cloud_name: 'lustige-truppe', 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 // ===================================
 // USER ROUTES
 // ===================================
@@ -66,22 +94,41 @@ router.get("/:id/edit", middleware.checkUserOwnership, function(req, res) {
 
 
 //UPDATE - Update info
-router.put("/:id",middleware.checkUserOwnership, function(req, res){
+router.put("/:id",middleware.checkUserOwnership, upload.single('user[avatar]'), function(req, res){
     if (!req.body.user.viewClassic) {
         req.body.user.viewClassic= false;
     }
     else {
-         req.body.user.viewClassic= true;
+        req.body.user.viewClassic= true;
     }
-    
-    User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
-        if (err || !updatedUser) {
-            req.flash("error","Mitglied nicht gefunden!");
-            res.redirect("back");        
+            
+    User.findById(req.params.id, function(err, foundUser){
+        if (!req.hasOwnProperty('file')) {
+            console.log("taking old avatar: " + foundUser.avatar + "...");
+            req.body.user.avatar = foundUser.avatar;
+            User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
+                if (err || !updatedUser) {
+                    req.flash("error","Mitglied nicht gefunden!");
+                    res.redirect("back");        
+                } else {
+                    res.redirect("/users/" + req.params.id);
+                }
+            });
         } else {
-            res.redirect("/users/" + req.params.id);
+            console.log("Uploading new avatar: " +req.file.path + "...");
+            cloudinary.uploader.upload(req.file.path, function(cloudinaryresult) {
+                console.log("Avatar saved at " + cloudinaryresult.secure_url);
+                req.body.user.avatar = cloudinaryresult.secure_url;
+                    User.findByIdAndUpdate(req.params.id, req.body.user, function(err, updatedUser){
+                        if (err || !updatedUser) {
+                            req.flash("error","Mitglied nicht gefunden!");
+                            res.redirect("back");        
+                        } else {
+                            res.redirect("/users/" + req.params.id);
+                        }
+                });
+            });
         }
-        
     });
 });
 

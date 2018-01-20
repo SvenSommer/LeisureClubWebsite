@@ -1,7 +1,7 @@
 <% include ../partials/header %>
     
     
-    <h1>Mitglieder des <%= clubname %></h1>
+    <h1>Mitglieder der <%= clubname_gen %></h1>
     <table class="table table-hover table-responsive">
         <thead>
             <tr>
@@ -20,14 +20,22 @@
         </thead>
         <tbody>
             <% users.forEach(function(user){ %>
+            <% if (moment(user.birthday).format("DD.MM")==moment().format("DD.MM")) { %> 
+            <tr class="info">
+            <% } else {%>
             <tr>
+            <% }%>
                 <td><a href="/users/<%= user._id %>"><%= user.username %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.firstname %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.lastname %></a></td>
                 <td><a href="/users/<%= user._id %>">
                     <% if(user.birthday) { %> 
-                        <%=moment(user.birthday).format('DD. MM. YYYY') %></a></td>
+                        <%=moment(user.birthday).format('DD. MM. YYYY') %></a>
                     <% } %>
+                    <% if (moment(user.birthday).format("DD.MM")==moment().format("DD.MM")) { %> 
+                    <i class="fa fa-birthday-cake" aria-hidden="true"></i>
+                    <% }%>
+                </td>
                 <td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.telephone %></a></td>
                 <td><a href="/users/<%= user._id %>"><%= user.mobil %></a></td>

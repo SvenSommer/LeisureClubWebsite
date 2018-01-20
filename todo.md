@@ -1,8 +1,12 @@
 Umgesetzt
 * event/index Anzahl der Kommentare wird ebenfalls in der Übersicht aufgeführt
-* Platzhalter für ein Bild einer Veranstaltung wird nur angezeigt, wenn auch ein Bild hinterlegt wurde
+* Platzhalter für ein Bild einer Veranstaltung wird nur noch angezeigt, wenn auch ein Bild hinterlegt wurde
 * Letzter Login Zeitpunkt wird den Administratoren in der Übersichtsseite der Mitglieder angezeigt.
-* Verbesserung der Fehlermeldungen bei vergeblichen Einlogg Versuchen
+* Verbesserung der Fehlermeldungen bei vergeblichen Anmeldeversuchen
+* Hochladen eines Bildes für Veranstaltung hinzugefügt
+* Ersetzen eines Bildes einer existierenden Veranstaltung hinzugefügt
+* Verbesserung der Kommentargliederung in der Detailseite einer Veranstaltung
+* Kommentare können nun in einem großerem Feld eingegeben werden.
 
 TODO Ideen
 * event/new  Bild hochladen
