@@ -27,7 +27,7 @@
                 </div>
                 <div class="caption">
                      <!--Details!-->
-                    <p><%=event.description.replace(/\n/g, '<br/>')%></p>
+                    <p><%=event.description%></p>
                      <p>
                         <em>erstellt von <a href="/users/<%= event.author.id %>"><%=event.author.username%></a>, <%= moment(event.created).fromNow() %></em>
                     </p>
