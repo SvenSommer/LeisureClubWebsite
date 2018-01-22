@@ -1,22 +1,34 @@
 <% include ../partials/header %>
+<%
+       if(moment(event.date).format('YYYY') == moment("01.01.1970").format('YYYY')) {
+            event.planned = false;
+        }
+        var MaxSubscriber = "unbegrenzt";
+        if(event.maxSubscribers != null) {
+            MaxSubscriber = event.maxSubscribers;
+        }
+        %>
 <div class="row">
     <div class="col-md-12">
        
-    </div>
-    <div class="col-md-3">
-        <% if(event.image != "") {%>
-        <div class="thumbnail">
-            <img class="img-responsive" src="<%=event.image%>">
+   
+        <% if(event.image != null) {%>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <img class="img-responsive" src="<%=event.image%>">
+            </div>
+            <div id="map"></div>
         </div>
         <% }%>
-        <div id="map"></div>
-    </div>
         <div class="col-md-9">
-            <div class="thumbnail">
+             <div class="well well">
                 <div class="caption-full">
-                <h2><%=event.title%> am </strong><%=moment(event.date).format('DD. MMMM YYYY')%></h2>
+                <h2><%=event.title%>
+                <% if(event.planned){%>
+                 am <%=moment(event.date).format('DD. MMMM YYYY')%>
+                <% } else { %> [in Planung] <% } %>
+                </h2>
                  <!--Edit & Delete Buttons !-->
-                 
                     <% if(currentUser && event.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
                             <a class="btn btn-xs btn-warning" href="/events/<%=event._id%>/edit">Bearbeiten</a>
                             <form class="delete-form" action="/events/<%=event._id%>?_method=DELETE" method="POST">
@@ -27,7 +39,7 @@
                 </div>
                 <div class="caption">
                      <!--Details!-->
-                    <p><%=event.description%></p>
+                    <p><span style="white-space: pre-line"><%=event.description%></span></p>
                      <p>
                         <em>erstellt von <a href="/users/<%= event.author.id %>"><%=event.author.username%></a>, <%= moment(event.created).fromNow() %></em>
                     </p>
@@ -36,11 +48,19 @@
                             <tbody>
                               <tr>
                                 <td><strong>Datum und Uhrzeit:</strong></td>
-                                <td><%=moment(event.date).format('DD. MMM YYYY')%> um <%=event.time%> Uhr (<em><%= moment(event.date).fromNow() %></em>)</td>
+                                    <% if(!event.planned){%>
+                                        <td><em>wird noch festgelegt</em></td>
+                                    <% } else {%>
+                                        <td><%=moment(event.date).format('DD. MMM YYYY')%> um <%=event.time%> Uhr (<em><%= moment(event.date).fromNow() %></em>)</td>
+                                    <% } %>
                               </tr>
                               <tr>
                                   <td><strong>Anmeldeschluss:</strong></td>
-                                  <td><%=moment(event.deadline).format('DD. MMM YYYY')%> <em>(<%= moment(event.deadline).fromNow() %>)</em></td>
+                                    <% if(!event.planned){%>
+                                        <td><em>wird noch festgelegt</em></td> 
+                                    <% } else {%>
+                                        <td><%=moment(event.deadline).format('DD. MMM YYYY')%> <em>(<%= moment(event.deadline).fromNow() %>)</em></td>
+                                    <% } %>
                               </tr>
                               <tr>
                                   <td><strong>Ort:</strong></td>
@@ -61,16 +81,21 @@
                         <% var isSubscribed = false;
                         var cDate = new Date();
                         var dDate = new Date(event.deadline);
+                        var subscribeText = "Anmelden";
+                        var unsubscribeText ="Abmelden";
+                        if(!event.planned) {
+                            subscribeText = "Ich bin interessiert"
+                            unsubscribeText = "Kein Interesse"   
+                        }
                         %>
                         <!--Subscribe or Unsubscribe Buttons !--> 
                         <% event.subscribers.forEach(function(subscriber){ %>
                             <% if(currentUser && subscriber.id.equals(currentUser._id)){ isSubscribed = true;%>
-                                
                                 <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
                                      <% if(moment(cDate).isAfter(dDate)) {%>
-                                         <button class="btn btn-lg btn-danger btn-block disabled">Abmelden</button>
+                                         <button class="btn btn-lg btn-danger btn-block disabled"><%=unsubscribeText%></button>
                                      <% } else {%>
-                                         <button class="btn btn-lg btn-danger btn-block">Abmelden</button>
+                                         <button class="btn btn-lg btn-danger btn-block"><%=unsubscribeText%></button>
                                      <% } %>
                                 </form>
                             <% } %>
@@ -79,9 +104,9 @@
                          <% if(!isSubscribed){ %>
                             <form  action="/events/<%=event._id %>/subscribers" method="POST">
                                 <% if(moment(cDate).isAfter(dDate)) {%>
-                                    <button class="btn btn-lg btn-success btn-block disabled">Anmelden</button>
+                                    <button class="btn btn-lg btn-success btn-block disabled"><%=subscribeText%></button>
                                 <% } else {%>
-                                    <button class="btn btn-lg btn-success btn-block">Anmelden</button>
+                                    <button class="btn btn-lg btn-success btn-block"><%=subscribeText%></button>
                                 <% } %>    
                             </form>
                          <% } %>
@@ -93,10 +118,14 @@
                      <table class="table">
                         <thead>
                             <tr>
-                                <th>Teilnehmer</th>
+                                <% if(!event.planned){%>
+                                    <th>Interessenten</th>
+                                <% } else { %>
+                                    <th>Teilnehmer</th>
+                                <% } %>
                                 <th style="text-align: right">
                                     <% if(event.subscribers){%>
-                                        <%= event.subscribers.length %> / <%= event.maxSubscribers %>
+                                        <%= event.subscribers.length %> / <%= MaxSubscriber %>
                                     <% } else { %>
                                         0 / <%= event.maxSubscribers %>
                                     <% } %> </strong>
@@ -110,7 +139,12 @@
                                 <td style="text-align: right"><%= moment(subscriber.created).fromNow() %>
                                 <% if(currentUser && currentUser.isAdmin){%>
                                     <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
-                                        <button class="btn btn-xs btn-danger">Teilnehmer abmelden</button>
+                                         <% if(!event.planned){%>
+                                            <button class="btn btn-xs btn-danger">Interessent abmelden</button>
+                                        <% } else { %>
+                                            <button class="btn btn-xs btn-danger">Teilnehmer abmelden</button>
+                                        <% } %>
+                                        
                                     </form>
                                 <% } %> 
                                 </td>

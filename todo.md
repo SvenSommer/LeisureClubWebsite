@@ -7,14 +7,18 @@ Umgesetzt
 * Ersetzen eines Bildes einer existierenden Veranstaltung hinzugefügt
 * Verbesserung der Kommentargliederung in der Detailseite einer Veranstaltung
 * Kommentare können nun in einem großerem Feld eingegeben werden.
+* Geburtstagskinder werden in der Übersichtstabelle der Mitglieder hervorgehoben
+* Texte einer Veranstaltung und Ankündigungen  werden nun besser lesbar mit Zeilenumbrüchen dargestellt
+* Die Mitgliedertabelle kann nun nach jeder Spalte alphabetisch geordnet werden, indem man auf die jeweilige Spaltenüberschrift klickt
+* Einführung der Kategorie "Veranstaltung in Planung": Veranstaltungen müssen kein festes Datum mehr bei der Erstellung einer Veranstaltung erhalten,
+  stattdessen kann man die Option wählen "Das Datum steht noch nicht fest, die Veranstaltung wird noch geplant!". Die Veranstaltung taucht dann 
+  unter der Überschrift "Vernstaltung in Planung" auf. Jedes Mitglied kann diese Veranstaltungen kommentieren, und (ählich wie bei der Anmeldefunktion) sein Intresse bekunden.
+  Sobald der Veranstaltung ein festes Datum zugeordnet wird, taucht diese unter den normalen Veranstaltungen auf.
+
+
 
 TODO Ideen
-* event/new  Bild hochladen
-* event/edit Bild hochladen
-* event/show Bilder hochladen
 * event/index vergangene Veranstaltungen ansehen
-* user/login Zeitpunkt speichern
-* user/show last loginzeit anzeigen
 * user/show teilnehmende veranstaltungen des Benutzers
 
  

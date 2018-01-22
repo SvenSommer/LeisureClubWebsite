@@ -8,7 +8,7 @@
                 <th>Datum</th>
                 <th>Titel</th>
                 <th>Inhalt</th>
-                <th>Author</th>
+                <th>Autor</th>
                 <th>zur Kenntnis genommen von</th>
             </tr>
         </thead>
@@ -17,7 +17,7 @@
             <tr>
                 <td><%= moment(announcement.created).format('DD. MMM YYYY') %></td>
                 <td><a href="/announcements/<%= announcement._id %>"><%= announcement.title %></a></td>
-                <td><%= announcement.text %></td>
+                <td><span style="white-space: pre-line"><%= announcement.text %></span></td>
                 <td><%= announcement.author.username %></td>
                 <td><% announcement.accepted.forEach(function(accepter){ %>
                     <%=accepter.username%><br>

@@ -65,32 +65,93 @@ router.get("/", middleware.isLoggedIn, function(req, res){
 
 // CREATE - add new event to DB
 router.post("/", middleware.isLoggedIn, upload.single('image'), function(req,res){
+    var title = req.body.title;
+    var image =  req.body.image;
+    var description =req.body.description;
+    var meetingpoint =req.body.meetingpoint;
+    var planned = true;
+    var date = "";
+    var time = req.body.time;
+    var deadline = "";
+    console.log("req.body.notPlanned: " + req.body.notPlanned);
+    if (!req.body.notPlanned) {
+        planned = false;
+        date =  moment('1970-01-01').format('YYYY-MM-DD');
+        deadline = moment('2200-01-01').format('YYYY-MM-DD');
+    }
+    else {
+        planned = true;
+        date = moment(req.body.date, "DD.MM.YYYY", 'de').format('YYYY-MM-DD');
+        deadline = moment(req.body.deadline, "DD.MM.YYYY", 'de').format('YYYY-MM-DD');
+    }
     
-   cloudinary.uploader.upload(req.file.path, function(cloudinaryresult) {
-        var title = req.body.title;
-        var image =  cloudinaryresult.secure_url;
-        var description =req.body.description;
-        var meetingpoint =req.body.meetingpoint;
-        var date =  moment(req.body.date, "DD.MM.YYYY", 'de').format('YYYY-MM-DD');
-        console.log("date: " + date);
-        var time =req.body.time;
-        var deadline = moment(req.body.deadline, "DD.MM.YYYY", 'de').format('YYYY-MM-DD');
-        var maxSubscribers = req.body.maxSubscribers;
-        var fee =req.body.fee;
-        var author = {
-            id: req.user._id,
-            username: req.user.username
-        };
+    
+
+    console.log("planned: " + planned);
+    console.log("date: " + date);
+    console.log("deadline: " + deadline);
+   
+    
+    var maxSubscribers = req.body.maxSubscribers;
+    var fee =req.body.fee;
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    };
+    var lat = "";
+    var lng = "";
+    var location = req.body.location;
+    
+    if (req.hasOwnProperty('file')) {
+        cloudinary.uploader.upload(req.file.path, function(cloudinaryresult) {
+            image =  cloudinaryresult.secure_url;
         
+            geocoder.geocode(req.body.location, function (err, data) {
+                if(err){
+                        req.flash('error', err.message);
+                        return res.redirect('back');
+                    } 
+                    else {
+                        if (data.results[0]) {
+                            lat = data.results[0].geometry.location.lat;
+                            lng = data.results[0].geometry.location.lng;
+                            location = data.results[0].formatted_address;
+                        }
+                        var newEvent = {
+                            title : title,
+                            author: author,
+                            image: image,
+                            description : description,
+                            location : location,
+                            lat: lat, 
+                            lng: lng,
+                            meetingpoint : meetingpoint,
+                            date : date,
+                            time : time,
+                            deadline : deadline,
+                            planned:planned,
+                            maxSubscribers : maxSubscribers,
+                            fee : fee
+                        };
+                        // Create a new Event and save to DB
+                        Event.create(newEvent, function(err, newlyCreated){
+                            if(err){
+                                req.flash('error', err.message);
+                                return res.redirect('back');
+                            } else {
+                                res.redirect("/events/" + newlyCreated.id);
+                            }
+                        });
+                    }
+            });
+        });
+    } else {
         geocoder.geocode(req.body.location, function (err, data) {
-        if(err){
+            if(err){
                 req.flash('error', err.message);
                 return res.redirect('back');
             } 
             else {
-                var lat = "";
-                var lng = "";
-                var location = req.body.location;
                 if (data.results[0]) {
                     lat = data.results[0].geometry.location.lat;
                     lng = data.results[0].geometry.location.lng;
@@ -122,7 +183,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req,res
                 });
             }
         });
-    });
+    }
 });
 
 //NEW - show form to create Event
@@ -166,57 +227,48 @@ router.put("/:id", middleware.checkEventOwnership, upload.single('image'), funct
             lng = data.results[0].geometry.location.lng;
             location = data.results[0].formatted_address;
         }
-
-
-    Event.findById(req.params.id, function(err, foundEvent){
-       //check for new image
-       if (!req.hasOwnProperty('file')) {
-            console.log("taking old image: " + foundEvent.image + "...");
-             var newData = 
-            {
-                title: req.body.title, 
-                image: foundEvent.image, 
-                description: req.body.description, 
-                location : location,
-                lat: lat, 
-                lng: lng,
-                meetingpoint: req.body.meetingpoint, 
-                date : moment(req.body.date, "DD.MM.YYYY", 'de').format('YYYY-MM-DD'),
-                time: req.body.time, 
-                deadline: moment(req.body.deadline, "DD.MM.YYYY", 'de').format('YYYY-MM-DD'), 
-                maxSubscribers : req.body.maxSubscribers,
-                fee: req.body.fee
-            };
+        var planned = true;
+        var date = "";
+        var deadline = "";
+        console.log("req.body.notPlanned: " + req.body.notPlanned);
+        if (req.body.notPlanned != null) {
+            planned = false;
+            date =  moment('1970-01-01').format('YYYY-MM-DD');
+            deadline = moment('2200-01-01').format('YYYY-MM-DD');
+        }
+        else {
+            planned = true;
+            date = moment(req.body.date, "DD.MM.YYYY", 'de').format('YYYY-MM-DD');
+            deadline = moment(req.body.deadline, "DD.MM.YYYY", 'de').format('YYYY-MM-DD');
+        }
         
-            Event.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, campground){
-                if(err){
-                    req.flash("error", err.message);
-                    res.redirect("back");
-                } else {
-                    req.flash("success","Erfolgreich bearbeitet!");
-                    res.redirect("/events/" + campground._id);
-                }
-            });
-           } else
-       {
-           console.log("Uploading file: " +req.file.path + "...");
-            cloudinary.uploader.upload(req.file.path, function(cloudinaryresult) {
-                var newData = 
+    
+
+    console.log("planned: " + planned);
+    console.log("date: " + date);
+    console.log("deadline: " + deadline);
+
+        Event.findById(req.params.id, function(err, foundEvent){
+           //check for new image
+           if (!req.hasOwnProperty('file')) {
+                console.log("taking old image: " + foundEvent.image + "...");
+                 var newData = 
                 {
                     title: req.body.title, 
-                    image: cloudinaryresult.secure_url,
+                    image: foundEvent.image, 
                     description: req.body.description, 
                     location : location,
                     lat: lat, 
                     lng: lng,
+                    planned: planned,
                     meetingpoint: req.body.meetingpoint, 
-                    date : moment(req.body.date, "DD.MM.YYYY", 'de').format('YYYY-MM-DD'),
+                    date : date,
                     time: req.body.time, 
-                    deadline: moment(req.body.deadline, "DD.MM.YYYY", 'de').format('YYYY-MM-DD'), 
+                    deadline: deadline, 
                     maxSubscribers : req.body.maxSubscribers,
                     fee: req.body.fee
                 };
-                
+            
                 Event.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, campground){
                     if(err){
                         req.flash("error", err.message);
@@ -226,12 +278,42 @@ router.put("/:id", middleware.checkEventOwnership, upload.single('image'), funct
                         res.redirect("/events/" + campground._id);
                     }
                 });
-            });
-       }
-   
-
+               } else
+           {
+               console.log("Uploading file: " +req.file.path + "...");
+                cloudinary.uploader.upload(req.file.path, function(cloudinaryresult) {
+                    var newData = 
+                    {
+                        title: req.body.title, 
+                        image: cloudinaryresult.secure_url,
+                        description: req.body.description, 
+                        location : location,
+                        lat: lat, 
+                        lng: lng,
+                        planned: planned,
+                        meetingpoint: req.body.meetingpoint, 
+                        date : date,
+                        time: req.body.time, 
+                        deadline: deadline, 
+                        maxSubscribers : req.body.maxSubscribers,
+                        fee: req.body.fee
+                    };
+                    
+                    Event.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, campground){
+                        if(err){
+                            req.flash("error", err.message);
+                            res.redirect("back");
+                        } else {
+                            req.flash("success","Erfolgreich bearbeitet!");
+                            res.redirect("/events/" + campground._id);
+                        }
+                    });
+                });
+           }
        
-    });
+    
+           
+        });
   });
 });
 

@@ -55,7 +55,11 @@
             <hr>
             <ul>
             <% events.forEach(function(event) { %>
-                <li><a href="/events/<%= event.id %>"><%= event.title %> am <%= moment(event.date).format('DD. MMM YYYY') %></a></li>
+                 <% if(moment(event.date).format('YYYY') == moment("01.01.1970").format('YYYY')) { %>
+                    <li><a href="/events/<%= event.id %>"><%= event.title %> [in Planung] </a></li>
+                 <% } else { %>
+                    <li><a href="/events/<%= event.id %>"><%= event.title %> am <%= moment(event.date).format('DD. MMM YYYY') %></a></li>
+                 <% }%>
              <% });%> 
             </ul>
         </div>

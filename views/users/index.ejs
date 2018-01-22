@@ -2,19 +2,19 @@
     
     
     <h1>Mitglieder der <%= clubname_gen %></h1>
-    <table class="table table-hover table-responsive">
+    <table class="table table-hover table-responsive" id="userTable">
         <thead>
             <tr>
-                <th>Benutzername</th>
-                <th>Vorname</th>
-                <th>Nachname</th>
-                <th>Geburtsdatum</th>
-                <th>Email</th>
-                <th>Telefonnummer</th>
-                <th>Mobil</th>
+                <th onclick="sortTable(0)">Benutzername</th>
+                <th onclick="sortTable(1)">Vorname</th>
+                <th onclick="sortTable(2)">Nachname</th>
+                <th onclick="sortTable(3)">Geburtsdatum</th>
+                <th onclick="sortTable(4)">Email</th>
+                <th onclick="sortTable(5)">Telefonnummer</th>
+                <th onclick="sortTable(6)">Mobil</th>
                 <% if(currentUser.isAdmin) { %>
-                <th>letzter Login</th>
-                <th>Status</th>
+                <th onclick="sortTable(7)">letzter Login</th>
+                <th onclick="sortTable(8)">Status</th>
                 <% } %>
             </tr>
         </thead>

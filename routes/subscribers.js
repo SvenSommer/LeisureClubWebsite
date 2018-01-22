@@ -50,10 +50,9 @@ router.post("/", middleware.isLoggedIn, function(req,res){
                         foundevent.subscribers.push(subscriber);
                         foundevent.save();
                         
-                        req.flash("success", "Du hast dich erfolgreich für die Veranstaltung" + foundevent.title + " angemeldet!");
-                       // res.redirect("/events/" + foundevent._id);
-                      // res.redirect("back");   
-                       res.redirect("/events#"+foundevent.id);   
+                        req.flash("success", 'Du hast dich erfolgreich für die Veranstaltung "' + foundevent.title + '" angemeldet!');
+                        res.redirect("back"); 
+                      // res.redirect("/events#"+foundevent.id);   
                             
                     }
                     
@@ -84,10 +83,9 @@ router.delete("/:subscriber_id", function(req, res){
                          res.redirect("back");  
                     } else
                     {
-                        req.flash("success", "Du hast dich erfolgreich für die Veranstaltung " + foundevent.title + " abgemeldet!");
-                       // res.redirect("/events/"+ req.params.id);
-                       // res.redirect("back"); 
-                        res.redirect("/events#"+foundevent.id);   
+                        req.flash("success", 'Du hast dich erfolgreich für die Veranstaltung "' + foundevent.title + '" abgemeldet!');
+                        res.redirect("back"); 
+                       // res.redirect("/events#"+foundevent.id);   
                     }
                 });
             }

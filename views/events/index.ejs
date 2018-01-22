@@ -10,7 +10,7 @@
                     <h2><a href="/announcements/<%= announcement.id %>"><%= announcement.title %></a></h2>
                     <h5>verfasst von <%=announcement.author.username %> am <%= moment(announcement.created).format('DD. MMM YYYY') %><h5>
                     <p>
-                        <%= announcement.text %>
+                        <span style="white-space: pre-line"><%= announcement.text %></span>
                      </p>
                     <hr>
                     <form  action="/announcements/<%=announcement.id %>/accept" method="POST">
@@ -53,6 +53,57 @@ while (date <= endDate)
     date.setMonth(date.getMonth() + 1);
 }
 %>
+<h1>Veranstaltungen in Planung</h1>
+<div class="row">
+    <table class="table table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>Beschreibung</th>
+                <th>Unkosten</th>
+                <th>Kommentare</th>
+                <th>Interessiert sind</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% events.forEach(function(event){ %>
+                <% if(moment(event.date).format('YYYY') == "1970") { %>
+                    <tr>
+                        <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
+                        <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>
+                        <td><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
+                        <td>
+                            <% event.subscribers.forEach(function(subscriber){ %>
+                                <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>
+                            <% }); %>
+                        </td>    
+                        <td>
+                             <% var isSubscribed = false;
+                            var cDate = new Date();
+                            var dDate = new Date(event.deadline);
+                            %>
+                            <!--Subscribe or Unsubscribe Buttons !--> 
+                            <% event.subscribers.forEach(function(subscriber){ %>
+                                <% if(currentUser && subscriber.id.equals(currentUser._id)){ isSubscribed = true;%>
+                                    <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
+                                             <button class="btn btn-lg btn-danger btn-block">Kein Interesse</button>
+                                    </form>
+                                <% } %>
+        
+                            <% }) %>
+        
+                             <% if(!isSubscribed){ %>
+                                <form  action="/events/<%=event._id %>/subscribers" method="POST">
+                                        <button class="btn btn-lg btn-success btn-block">Ich bin interessiert</button>
+                                </form>
+                             <% } %>
+                        </td>
+                    </tr>
+                <% } %>  
+            <% }); %>
+        </tbody>
+    </table>
+</div>    
 <h1>Veranstaltungen</h1>
 <% var viewClassic = currentUser.viewClassic; %>
 
@@ -64,12 +115,12 @@ while (date <= endDate)
                 <div>
                     <h3><%= month.headerstring %></h3>
                     <hr>
-                    <table class="table table-hover table-responsive">
+                    <table class="table table-striped table-hover table-responsive">
                         <thead>
                             <tr>
                                 <th>Datum</th>
                                 <th>Beschreibung</th>
-                                <th>Anmeld.</th>
+                                <th>Anmeldeende</th>
                                 <th>Unkosten</th>
                                 <th>Kommentare</th>
                                 <th>angmeldet sind</th>
