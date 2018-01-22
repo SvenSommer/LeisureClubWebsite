@@ -74,7 +74,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req,res
     var time = req.body.time;
     var deadline = "";
     console.log("req.body.notPlanned: " + req.body.notPlanned);
-    if (!req.body.notPlanned) {
+    if (req.body.notPlanned  != null) {
         planned = false;
         date =  moment('1970-01-01').format('YYYY-MM-DD');
         deadline = moment('2200-01-01').format('YYYY-MM-DD');
