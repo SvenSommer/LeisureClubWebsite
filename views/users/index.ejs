@@ -2,19 +2,20 @@
     
     
     <h1>Mitglieder der <%= clubname_gen %></h1>
-    <table class="table table-hover table-responsive" id="userTable">
+    <table data-toggle="table" data-classes="table table-no-bordered" class="table table-hover table-responsive">
+   
         <thead>
             <tr>
-                <th onclick="sortTable(0)">Benutzername</th>
-                <th onclick="sortTable(1)">Vorname</th>
-                <th onclick="sortTable(2)">Nachname</th>
-                <th onclick="sortTable(3)">Geburtsdatum</th>
-                <th onclick="sortTable(4)">Email</th>
-                <th onclick="sortTable(5)">Telefonnummer</th>
-                <th onclick="sortTable(6)">Mobil</th>
+                <th data-sortable="true" data-field="username">Benutzername</th>
+                <th data-sortable="true">Vorname</th>
+                <th data-sortable="true">Nachname</th>
+                <th data-sortable="true">Geb.-datum</th>
+                <th data-sortable="true">Email</th>
+                <th data-sortable="true">Telefon</th>
+                <th data-sortable="true">Mobil</th>
                 <% if(currentUser.isAdmin) { %>
-                <th onclick="sortTable(7)">letzter Login</th>
-                <th onclick="sortTable(8)">Status</th>
+                <th data-sortable="true">letzter Login</th>
+                <th data-sortable="true">Status</th>
                 <% } %>
             </tr>
         </thead>
@@ -25,10 +26,10 @@
             <% } else {%>
             <tr>
             <% }%>
-                <td><a href="/users/<%= user._id %>"><%= user.username %></a></td>
-                <td><a href="/users/<%= user._id %>"><%= user.firstname %></a></td>
-                <td><a href="/users/<%= user._id %>"><%= user.lastname %></a></td>
-                <td><a href="/users/<%= user._id %>">
+                <td><a data-value="<%= user.username %>" href="/users/<%= user._id %>"><%= user.username %></a></td>
+                <td><a data-value="<%= user.firstname %>" href="/users/<%= user._id %>"><%= user.firstname %></a></td>
+                <td><a data-value="<%= user.lastname %>" href="/users/<%= user._id %>"><%= user.lastname %></a></td>
+                <td><a data-value="<%= user.birthday %>" href="/users/<%= user._id %>">
                     <% if(user.birthday) { %> 
                         <%=moment(user.birthday).format('DD. MM. YYYY') %></a>
                     <% } %>
@@ -37,11 +38,11 @@
                     <% }%>
                 </td>
                 <td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
-                <td><a href="/users/<%= user._id %>"><%= user.telephone %></a></td>
-                <td><a href="/users/<%= user._id %>"><%= user.mobil %></a></td>
+                <td><a data-value="<%= user.telephone %>" href="/users/<%= user._id %>"><%= user.telephone %></a></td>
+                <td><a data-value="<%= user.mobil %>" href="/users/<%= user._id %>"><%= user.mobil %></a></td>
                 <% if(currentUser.isAdmin) {  %>
                     <td>
-                        <%= moment(user.lastLogin).utcOffset(60).format("DD.MM.YYYY HH:mm") %>
+                        <a data-value="<%= moment(user.lastLogin).utcOffset(60).format("YYYYMMDD HH:mm") %>" href="/users/<%= user._id %>"><%= moment(user.lastLogin).utcOffset(60).format("DD.MM.YYYY HH:mm") %></a>
                     </td>
                     <td>
                             <% if(user.isActive && !user.isAdmin) { %>
