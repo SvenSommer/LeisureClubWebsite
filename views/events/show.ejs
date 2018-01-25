@@ -2,7 +2,7 @@
 <%
 
     var isover = false;
-    if(moment().isAfter(moment(event.date))) {
+    if(moment().add(-1,'days').isAfter(moment(event.date))) {
        event.isover = true;
     }
     
@@ -20,8 +20,6 @@
         %>
 <div class="row">
     <div class="col-md-12">
-       
-   
         <% if(event.image != null) {%>
         <div class="col-md-3">
             <div class="thumbnail">
@@ -44,16 +42,15 @@
                  am <%=moment(event.date).format('DD. MMMM YYYY')%>
                 <% } %>
                 </h2>
-                 <% if(!event.isover){%>
                  <!--Edit & Delete Buttons !-->
                     <% if(currentUser && event.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
                             <a class="btn btn-xs btn-warning" href="/events/<%=event._id%>/edit">Bearbeiten</a>
-                            <form class="delete-form" action="/events/<%=event._id%>?_method=DELETE" method="POST">
-                                <button class="btn btn-xs btn-danger">Veranstaltung löschen</button>
-                            </form>
-                            
-                     <% } %>    
-                 <% } %>  
+                            <% if(!event.isover){%>
+                                <form class="delete-form" action="/events/<%=event._id%>?_method=DELETE" method="POST">
+                                    <button class="btn btn-xs btn-danger">Veranstaltung löschen</button>
+                                </form>
+                            <% } %>  
+                    <% } %>    
                 <hr>
                 </div>
                 <div class="caption">

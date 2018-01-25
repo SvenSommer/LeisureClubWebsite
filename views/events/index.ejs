@@ -129,7 +129,7 @@ while (date <= endDate)
                         </thead>
                         <tbody>
                             <% events.forEach(function(event){ %>
-                                <% if(moment(event.date).format('MMM_YYYY').replace('.', '') == month.compareDate) { %>
+                                <% if(moment(event.date).format('MMM_YYYY').replace('.', '') == month.compareDate && !moment().add(-1,'days').isAfter(moment(event.date))) { %>
                                     <tr>
                                         <td><a id="<%=event.id%>"></a><%= moment(event.date).format('DD.MM.YYYY dddd') %>,</br><%=event.time %> Uhr</td>
                                         <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
