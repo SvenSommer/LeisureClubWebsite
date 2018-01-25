@@ -36,6 +36,7 @@ while (date <= startDate)
             <tr>
                 <th>Datum</th>
                 <th>Beschreibung</th>
+                <th>Kommentare</th>
                 <th>Fotos geteilt</th>
                 <th>teilgenommen haben</th>
             </tr>
@@ -46,7 +47,8 @@ while (date <= startDate)
                     <tr>
                          <td><a id="<%=memory.id%>"></a><%= moment(memory.date).format('DD.MM.YYYY dddd') %>,</br><%=memory.time %> Uhr</td>
                          <td style="text-align: left"><a href="/events/<%= memory._id %>"><strong><%= memory.title %></strong></a><br><%= memory.description %></td>
-                         <td style="text-align: left"><a href="/events/<%= memory._id %>"><%= memory.photos.length %></td>
+                         <td style="text-align: center"><a href="/events/<%= memory._id %>"><%= memory.comments.length %></td>
+                         <td style="text-align: center"><a href="/events/<%= memory._id %>"><%= memory.photos.length %></td>
                          <td>
                             <% memory.subscribers.forEach(function(subscriber){ %>
                                 <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>

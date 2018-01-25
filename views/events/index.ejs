@@ -71,7 +71,7 @@ while (date <= endDate)
                     <tr>
                         <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
                         <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>
-                        <td><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
+                        <td style="text-align: center"><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
                         <td>
                             <% event.subscribers.forEach(function(subscriber){ %>
                                 <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>
@@ -133,9 +133,9 @@ while (date <= endDate)
                                     <tr>
                                         <td><a id="<%=event.id%>"></a><%= moment(event.date).format('DD.MM.YYYY dddd') %>,</br><%=event.time %> Uhr</td>
                                         <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
-                                        <td><a href="/events/<%= event._id %>"><%= moment(event.deadline).format('DD.MM.') %></a></td>
+                                        <td><a href="/events/<%= event._id %>"><%= moment(event.deadline).format('DD.MM.YYYY') %></a></td>
                                         <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>
-                                        <td><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
+                                        <td style="text-align: center"><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
                                         <td>
                                             <% event.subscribers.forEach(function(subscriber){ %>
                                                 <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>

@@ -1,5 +1,5 @@
 
-TODO Ideen
+TODO Ideen 
 * event/index vergangene Veranstaltungen ansehen
 * user/show teilnehmende veranstaltungen des Benutzers
 ______________________________________________ 

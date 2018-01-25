@@ -32,11 +32,14 @@
                 <div class="caption-full">
                 <h2><%=event.title%>
                 <% if(event.isover){%>
-                 vom <%=moment(event.date).format('DD. MMMM YYYY')%> [vergangene Veranstaltung]
+                    <% if(event.planned){%>
+                         vom <%=moment(event.date).format('DD. MMMM YYYY')%> [vergangene Veranstaltung]
+                    <% } else  { %>
+                      [in Planung] 
+                     <% } %>
                 <% } else if (event.planned) { %>
                  am <%=moment(event.date).format('DD. MMMM YYYY')%>
-                 <% } else  { %>
-                  [in Planung] <% } %>
+                <% } %>
                 </h2>
                  <% if(!event.isover){%>
                  <!--Edit & Delete Buttons !-->
