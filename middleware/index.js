@@ -1,6 +1,7 @@
 //All the middleware is here!
 var Event   = require("../models/event");
 var Comment = require("../models/comment");
+var Photo = require("../models/photo");
 var User    = require("../models/user");
 var Announcement = require("../models/announcement");
 
@@ -66,6 +67,31 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
                 } else {
                     //Does the user own the event?
                     if (foundComment.author.id.equals(req.user._id) || req.user.isAdmin) {
+                       next();
+                    }
+                    else{
+                         req.flash("error", "Du nicht die erforderlichen Rechte das zu tun.");
+                         res.redirect("back");
+                    }
+                }
+            });
+        } else {
+           req.flash("error", "Du musst dich erst einloggen!");
+           res.redirect("back");
+        }
+};
+
+//OWNS Photo?
+middlewareObj.checkPhotoOwnership = function(req, res, next) {
+        if (req.isAuthenticated()) {
+            Photo.findById(req.params.photo_id, function(err, foundPhoto){
+                if (err || !foundPhoto) {
+                    console.log(err);
+                    req.flash("error", "Foto nicht gefunden!");
+                    res.redirect("back");
+                } else {
+                    //Does the user own the event?
+                    if (foundPhoto.uploader.id.equals(req.user._id) || req.user.isAdmin) {
                        next();
                     }
                     else{

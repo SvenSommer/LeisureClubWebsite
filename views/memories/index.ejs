@@ -1,0 +1,58 @@
+<% include ../partials/header %>
+
+<%
+String.prototype.trunc = String.prototype.trunc ||
+      function(n){
+          return (this.length > n) ? this.substr(0, n-1) + "..." : this;
+      };
+//minDate 
+var tdates=[];
+memories.forEach(function(memory){
+    tdates.push(new Date(memory.date));
+});
+var minDate=new Date(Math.min.apply(null,tdates));
+
+//generate genMonths
+var genMonths = [];
+var date = new Date();
+var startDate = minDate.setMonth(minDate.getMonth());
+var monthNameList = ["Jan", "Feb", "Mär", "Apr", "Mai", "Juni", "Juli", "Aug", "Sep", "Okt", "Nov", "Dez"];
+while (date <= startDate)
+{
+    var headerstring = moment(date).format('MMMM') + " " + date.getFullYear();
+    var compareDate =  monthNameList[date.getMonth()] + "_" + date.getFullYear();
+    
+    genMonths.push({
+        headerstring: headerstring,
+        compareDate : compareDate
+    });
+    date.setMonth(date.getMonth() - 1);
+}
+%>
+<h1>Erinnerungen - vergangene Veranstaltungen</h1>
+<div class="row">
+    <table class="table table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Beschreibung</th>
+                <th>teilgenommen haben</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% memories.forEach(function(memory){ %>
+                    <% if(moment(memory.date).isBefore(moment()) && moment(memory.date).isAfter(moment("01-01-1970"))) { %>
+                    <tr>
+                         <td><a id="<%=memory.id%>"></a><%= moment(memory.date).format('DD.MM.YYYY dddd') %>,</br><%=memory.time %> Uhr</td>
+                         <td style="text-align: left"><a href="/events/<%= memory._id %>"><strong><%= memory.title %></strong></a><br><%= memory.description %></td>
+                         <td>
+                            <% memory.subscribers.forEach(function(subscriber){ %>
+                                <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>
+                            <% }); %>
+                        </td>    
+                     </tr>
+                     <% } %>
+                <% }); %>  
+        </tbody>
+    </table>
+</div>

@@ -37,7 +37,11 @@ var eventSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Comment"
     }],
-
+    photos: [
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Photo"
+    }],
     created: { type: Date, default: Date.now }
 });
 

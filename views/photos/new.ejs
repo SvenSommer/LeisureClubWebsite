@@ -1,0 +1,24 @@
+<% include ../partials/header %>
+
+
+<div class="row">
+    <h1 style="text-align: center;">Teile ein neues Foto zu der Veranstaltung <br>"<%=event.title %>" </h1>
+    <div style="width: 30%; margin: 25px auto;">
+        <form  action="/events/<%=event._id %>/photos" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <input class="form-control" type="file" id="image" name="image" accept="image/*" placeholder="Bitte ein Bild auswählen" required>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" name="photo[description]" placeholder="Beschreibung" rows="2" required></textarea>
+            </div>
+            <div class="form-group">
+               <button class="btn btn-lg btn-primary btn-block">Speichern</button>
+            </div>
+        </form>
+        <a href="/events/<%=event._id %>">Zurück</a>
+    </div>
+    
+</div>
+
+
+<% include ../partials/footer %>

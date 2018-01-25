@@ -59,22 +59,22 @@ router.get("/:comment_id/edit", middleware.checkCommentOwnership,  function(req,
             res.redirect("back");
         } 
         Comment.findById(req.params.comment_id, function(err, foundComment) {
-        if (err || !foundComment) {
-            req.flash("error","Kommentar nicht gefunden!");
-            res.redirect("back");
-        } else {
-             res.render("comments/edit", {event_id:req.params.id, comment: foundComment});
-        }
+            if (err || !foundComment) {
+                req.flash("error","Kommentar nicht gefunden!");
+                res.redirect("back");
+            } else {
+                 res.render("comments/edit", {event_id:req.params.id, comment: foundComment});
+            }
+        });
     });
 });
-    });
 
 
 //COMMENTS UPDATE ROUTE
 router.put("/:comment_id",middleware.checkCommentOwnership, function(req, res){
-    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedCommens){
-        if (err || !updatedCommens) {
-            req.flash("error","Komentar nicht gefunden!");
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
+        if (err || !updatedComment) {
+            req.flash("error","Kommentar nicht gefunden!");
             res.redirect("back");        
         } else {
             res.redirect("/events/" + req.params.id);

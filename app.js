@@ -14,10 +14,12 @@ var express             = require("express"),
 
 var indexRoutes         = require("./routes/index"),
     commentRoutes       = require("./routes/comments"),
+    photoRoutes         = require("./routes/photos"),
     subscribersRoutes   = require("./routes/subscribers"),
     eventRoutes         = require("./routes/events"),
     usersRoutes         = require("./routes/users"),
-    announcementsRoutes = require("./routes/announcements");
+    announcementsRoutes = require("./routes/announcements"),
+    memoriesRoutes = require("./routes/memories");
 
 
 // killall mongod ; cd ; ./mongod --repair ; cd data ; rm -rf mongod.lock ; cd ; ./mongod
@@ -96,9 +98,11 @@ app.use(function(req, res, next){
 app.use("/", indexRoutes);
 app.use("/events", eventRoutes);
 app.use("/events/:id/comments", commentRoutes);
+app.use("/events/:id/photos", photoRoutes);
 app.use("/events/:id/subscribers", subscribersRoutes);
 app.use("/users", usersRoutes);
 app.use("/announcements", announcementsRoutes);
+app.use("/memories", memoriesRoutes);
 
 
 app.listen(process.env.PORT, process.env.IP, function(){

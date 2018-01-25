@@ -1,0 +1,24 @@
+<% include ../partials/header %>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-3">
+        <a href="/events/<%=event_id %>">Zurück</a>
+        <ul class="list-group">
+            <% console.log("event: " + event)%>
+            <% event.photos.forEach(function(photol){ %>
+                <li class="list-group-item"><a href="/events/<%= event._id %>/photos/<%= photol._id %>"><img class="img-responsive" src="<%=photol.path%>"></a></li>
+            <% }); %>
+        </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="thumbnail">
+                            <img class="img-responsive" src="<%=photo.path%>">
+            </div>
+        </div>
+        <div class="col-md-3">
+        <a href="/events/<%=event_id %>">Weiter</a>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>

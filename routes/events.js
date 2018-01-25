@@ -195,7 +195,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 
 //SHOW - shows more info about one event
 router.get("/:id",middleware.isLoggedIn, function(req, res) {
-    Event.findById(req.params.id).populate("comments").populate("subscribers").exec(function(err, foundEvent){
+    Event.findById(req.params.id).populate("comments").populate("subscribers").populate("photos").exec(function(err, foundEvent){
         if (err || !foundEvent) {
             req.flash("error","Veranstaltung nicht gefunden!");
             res.redirect("back");

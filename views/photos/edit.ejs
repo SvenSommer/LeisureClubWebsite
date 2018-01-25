@@ -1,0 +1,29 @@
+<% include ../partials/header %>
+
+
+<div class="row">
+    <h1 style="text-align: center;">Foto bearbeiten</h1>
+    <div style="width: 30%; margin: 25px auto;">
+        <form action="/events/<%=event_id %>/photos/<%= photo._id%>?_method=PUT" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="thumbnail">
+                        <img class="img-responsive" src="<%=photo.path%>">
+                </div>
+                <label>Foto ersetzen</label>
+                <input class="form-control" type="file" id="image" name="image" accept="image/*" placeholder="Bitte ein neues Foto auswählen">
+            </div>
+            <div class="form-group">
+                <label>Beschreibung</label>
+                <textarea class="form-control" name="photo[description]"rows="2" required><%= photo.description%></textarea>
+            </div>
+            <div class="form-group">
+               <button class="btn btn-lg btn-primary btn-block">Speichern</button>
+            </div>
+        </form>
+        <a href="/events/<%=event_id %>">Zurück</a>
+    </div>
+    
+</div>
+
+
+<% include ../partials/footer %>

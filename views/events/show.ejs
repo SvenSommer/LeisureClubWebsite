@@ -1,12 +1,19 @@
 <% include ../partials/header %>
 <%
-       if(moment(event.date).format('YYYY') == moment("01.01.1970").format('YYYY')) {
-            event.planned = false;
-        }
-        var MaxSubscriber = "unbegrenzt";
-        if(event.maxSubscribers != null) {
-            MaxSubscriber = event.maxSubscribers;
-        }
+    if(moment(event.date).format('YYYY') == moment("01.01.1970").format('YYYY')) {
+        event.planned = false;
+    }
+    var isover = false;
+    if(moment().isAfter(moment(event.date))) {
+       event.isover = true;
+    }
+
+    var MaxSubscriber = "unbegrenzt";
+    if(event.maxSubscribers != null) {
+        MaxSubscriber = event.maxSubscribers;
+    }
+    
+
         %>
 <div class="row">
     <div class="col-md-12">
@@ -24,10 +31,14 @@
              <div class="well well">
                 <div class="caption-full">
                 <h2><%=event.title%>
-                <% if(event.planned){%>
+                <% if(event.isover){%>
+                 vom <%=moment(event.date).format('DD. MMMM YYYY')%> [vergangene Veranstaltung]
+                <% } else if (event.planned) { %>
                  am <%=moment(event.date).format('DD. MMMM YYYY')%>
-                <% } else { %> [in Planung] <% } %>
+                 <% } else  { %>
+                  [in Planung] <% } %>
                 </h2>
+                 <% if(!event.isover){%>
                  <!--Edit & Delete Buttons !-->
                     <% if(currentUser && event.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
                             <a class="btn btn-xs btn-warning" href="/events/<%=event._id%>/edit">Bearbeiten</a>
@@ -35,6 +46,7 @@
                                 <button class="btn btn-xs btn-danger">Veranstaltung löschen</button>
                             </form>
                      <% } %>    
+                 <% } %>  
                 <hr>
                 </div>
                 <div class="caption">
@@ -88,27 +100,29 @@
                             unsubscribeText = "Kein Interesse"   
                         }
                         %>
-                        <!--Subscribe or Unsubscribe Buttons !--> 
-                        <% event.subscribers.forEach(function(subscriber){ %>
-                            <% if(currentUser && subscriber.id.equals(currentUser._id)){ isSubscribed = true;%>
-                                <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
-                                     <% if(moment(cDate).isAfter(dDate)) {%>
-                                         <button class="btn btn-lg btn-danger btn-block disabled"><%=unsubscribeText%></button>
-                                     <% } else {%>
-                                         <button class="btn btn-lg btn-danger btn-block"><%=unsubscribeText%></button>
-                                     <% } %>
+                        <% if(!event.isover){%>
+                            <!--Subscribe or Unsubscribe Buttons !--> 
+                            <% event.subscribers.forEach(function(subscriber){ %>
+                                <% if(currentUser && subscriber.id.equals(currentUser._id)){ isSubscribed = true;%>
+                                    <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
+                                         <% if(moment(cDate).isAfter(dDate)) {%>
+                                             <button class="btn btn-lg btn-danger btn-block disabled"><%=unsubscribeText%></button>
+                                         <% } else {%>
+                                             <button class="btn btn-lg btn-danger btn-block"><%=unsubscribeText%></button>
+                                         <% } %>
+                                    </form>
+                                <% } %>
+                            <% }) %>
+        
+                             <% if(!isSubscribed){ %>
+                                <form  action="/events/<%=event._id %>/subscribers" method="POST">
+                                    <% if(moment(cDate).isAfter(dDate)) {%>
+                                        <button class="btn btn-lg btn-success btn-block disabled"><%=subscribeText%></button>
+                                    <% } else {%>
+                                        <button class="btn btn-lg btn-success btn-block"><%=subscribeText%></button>
+                                    <% } %>    
                                 </form>
-                            <% } %>
-                        <% }) %>
-    
-                         <% if(!isSubscribed){ %>
-                            <form  action="/events/<%=event._id %>/subscribers" method="POST">
-                                <% if(moment(cDate).isAfter(dDate)) {%>
-                                    <button class="btn btn-lg btn-success btn-block disabled"><%=subscribeText%></button>
-                                <% } else {%>
-                                    <button class="btn btn-lg btn-success btn-block"><%=subscribeText%></button>
-                                <% } %>    
-                            </form>
+                             <% } %>
                          <% } %>
                     </div>
                 </div>
@@ -118,7 +132,9 @@
                      <table class="table">
                         <thead>
                             <tr>
-                                <% if(!event.planned){%>
+                                <% if(event.isover){%>
+                                     <th>teilgenommen haben</th>
+                                <% } else if(!event.planned){%>
                                     <th>Interessenten</th>
                                 <% } else { %>
                                     <th>Teilnehmer</th>
@@ -136,8 +152,8 @@
                          <% event.subscribers.forEach(function(subscriber){ %>
                           <tr>
                                 <td><strong><a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a></strong></td>
-                                <td style="text-align: right"><%= moment(subscriber.created).fromNow() %>
-                                <% if(currentUser && currentUser.isAdmin){%>
+                                <td style="text-align: right">angemeldet <%= moment(subscriber.created).fromNow() %>
+                                <% if(currentUser && currentUser.isAdmin && !event.isover){%>
                                     <form class="delete-form" action="/events/<%= event._id %>/subscribers/<%= subscriber._id %>/?_method=DELETE" method="POST">
                                          <% if(!event.planned){%>
                                             <button class="btn btn-xs btn-danger">Interessent abmelden</button>
@@ -187,7 +203,73 @@
                     </table>
                 </div>  
             </div>
+        <!-- Fotos !-->    
+        <% if(event.isover){%>
+        <div class="well">
+            <div class="table-responsive"> 
+             <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fotos</th>
+                                <th style="text-align: right">
+                                    <a class = "btn btn-success" href="/events/<%= event._id %>/photos/new">Foto hochladen</a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+                                    <div class="slides"></div>
+                                    <h3 class="title"></h3>
+                                    <p class="uploader"></p>
+                                    <a class="prev">‹</a>
+                                    <a class="next">›</a>
+                                    <a class="close">Schließen</a>
+                                    <a class="play-pause"></a>
+                                    <ol class="indicator"></ol>
+                                </div>
+                                <div id="links">
+                                    <% event.photos.forEach(function(photo){ %>
+                                        <a class="photosmall" href="<%=photo.path%>" 
+                                        title="Foto von <%=photo.uploader.username%>: <%=photo.description%>"  
+                                        data-uploader="bereitgestellt von <%=photo.uploader.username%>" 
+                                        >
+                                            <img src="<%=photo.path%>" alt="<%=photo.description%>" >
+                                        </a>
+                                    <% }); %>
+                                </div>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>  
+            </div>
+        <% } %>
+<script src="/js/blueimp-gallery.min.js"></script>            
 <script>
+    document.getElementById('links').onclick = function (event) {
+    event = event || window.event;
+    var target = event.target || event.srcElement,
+        link = target.src ? target.parentNode : target,
+        options = {
+            index: link, event: event,
+            onslide: function (index, slide) {
+                self = this;
+                var initializeAdditional = function (index, data, klass, self) {
+                  var text = self.list[index].getAttribute(data),
+                    node = self.container.find(klass);
+                  node.empty();
+                  if (text) {
+                    node[0].innerHTML = text;
+                  }
+            };
+            initializeAdditional(index, 'data-uploader', '.uploader', self);
+          }
+        },
+        links = this.getElementsByTagName('a');
+    blueimp.Gallery(links, options);
+    };
+
   function initMap() {
     var lat = <%= event.lat %>;
     var lng = <%= event.lng %>;

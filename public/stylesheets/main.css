@@ -18,6 +18,14 @@
     background-size: contain;
 }
 
+.photosmall img {
+    display: inline-block;
+    width: auto;
+    background-size: contain;
+    height: 150px;
+    margin: 2px;
+}
+
 #indexthumbnail img {
     object-fit: cover;
     width: 100%;
