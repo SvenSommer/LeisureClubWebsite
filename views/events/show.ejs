@@ -1,11 +1,14 @@
 <% include ../partials/header %>
 <%
-    if(moment(event.date).format('YYYY') == moment("01.01.1970").format('YYYY')) {
-        event.planned = false;
-    }
+
     var isover = false;
     if(moment().isAfter(moment(event.date))) {
        event.isover = true;
+    }
+    
+        if(moment(event.date).format('YYYY') == moment("01.01.1970").format('YYYY')) {
+        event.planned = false;
+        event.isover = false;
     }
 
     var MaxSubscriber = "unbegrenzt";
@@ -48,6 +51,7 @@
                             <form class="delete-form" action="/events/<%=event._id%>?_method=DELETE" method="POST">
                                 <button class="btn btn-xs btn-danger">Veranstaltung löschen</button>
                             </form>
+                            
                      <% } %>    
                  <% } %>  
                 <hr>
