@@ -1,4 +1,10 @@
-Umgesetzt
+
+TODO Ideen
+* event/index vergangene Veranstaltungen ansehen
+* user/show teilnehmende veranstaltungen des Benutzers
+______________________________________________ 
+
+DONE
 * event/index Anzahl der Kommentare wird ebenfalls in der Übersicht aufgeführt
 * Platzhalter für ein Bild einer Veranstaltung wird nur noch angezeigt, wenn auch ein Bild hinterlegt wurde
 * Letzter Login Zeitpunkt wird den Administratoren in der Übersichtsseite der Mitglieder angezeigt.
@@ -14,25 +20,6 @@ Umgesetzt
   stattdessen kann man die Option wählen "Das Datum steht noch nicht fest, die Veranstaltung wird noch geplant!". Die Veranstaltung taucht dann 
   unter der Überschrift "Vernstaltung in Planung" auf. Jedes Mitglied kann diese Veranstaltungen kommentieren, und (ählich wie bei der Anmeldefunktion) sein Intresse bekunden.
   Sobald der Veranstaltung ein festes Datum zugeordnet wird, taucht diese unter den normalen Veranstaltungen auf.
-
-
-
-TODO Ideen
-* event/index vergangene Veranstaltungen ansehen
-* user/show teilnehmende veranstaltungen des Benutzers
-
- 
-
-
-
-
-
-
-
-
-______________________________________________ 
-
-DONE
 * event/index alte/neue Ansicht umschalten
 * user/show  Veranstzaltungen am Datum
 * Title ändern: "Kreis der lustigen Leute"
