@@ -154,13 +154,14 @@ router.put("/:photo_id",middleware.checkPhotoOwnership, upload.single('image'), 
 
 //PHOTO DESTROY ROUTE
 router.delete("/:photo_id",middleware.checkPhotoOwnership, function(req, res){
-    Photo.findByIdAndRemove(req.params.photo_id, function(err){
+    Photo.findByIdAndRemove(req.params.photo_id, function(err, foundPhoto){
      if (err) {
          res.redirect("back");  
      } else
      {
          req.flash("success", "Foto erfolgreich gelöscht!");
          res.redirect("/events/"+ req.params.id);
+
      }
       
     });

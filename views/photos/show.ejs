@@ -1,33 +1,34 @@
 <% include ../partials/header %>
-<!-- The Gallery as lightbox dialog, should be a child element of the document body -->
-<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
-    <div class="slides"></div>
-    <h3 class="title"></h3>
-    <a class="prev">‹</a>
-    <a class="next">›</a>
-    <a class="close">Schließen</a>
-    <a class="play-pause"></a>
-    <ol class="indicator"></ol>
+<div class="row">
+    <div class="col-md-12">
+    <div class="caption-full">
+            <h2>Fotos von "<a href="/events/<%=event_id%>"><%=event.title%></a>" vom <%=moment(event.date).format('DD. MMMM YYYY')%></h2>
+    </div>
+
+    <div class="col-md-9">
+            <img class="img-thumbnail" src="<%=photo.path%>">
+    </div>
+    <div class="col-md-3">
+       <div class="well"> 
+            <p class="h4">Informationen</p>
+            geteilt von <strong><%=photo.uploader.username%></strong> <%= moment(photo.created).fromNow() %> 
+            </br>Beschreibung: <%= photo.description%></td>
+             <% if(currentUser && photo.uploader.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
+                </br><a class="btn btn-xs btn-warning" href="/events/<%= event._id %>/photos/<%= photo._id %>/edit">Bearbeiten</a>  
+                <form class="delete-form" action="/events/<%= event._id %>/photos/<%= photo._id %>/?_method=DELETE" method="POST">
+                    <button class="btn btn-xs btn-danger">Foto löschen</button>
+                </form>
+            <% } %> 
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="well"> 
+                <% event.photos.forEach(function(photol){ %>
+                        <a  class="photosmall" href="/events/<%= event._id %>/photos/<%= photol._id %>"><img class="img-responsive" src="<%=photol.path%>"></a>
+                <% }); %>
+        </div>
+    </div>
+           
 </div>
 
-<div id="links">
-    <% event.photos.forEach(function(this_photo){ %>
-    <a href="<%=this_photo.path%>" title="<%=this_photo.description%>">
-        <img src="<%=this_photo.path%>" alt="<%=this_photo.description%>" height="150">
-    </a>
-          <% }); %>
-</div>
-
-
-<script src="/js/blueimp-gallery.min.js"></script>
-<script>
-document.getElementById('links').onclick = function (event) {
-    event = event || window.event;
-    var target = event.target || event.srcElement,
-        link = target.src ? target.parentNode : target,
-        options = {index: link, event: event},
-        links = this.getElementsByTagName('a');
-    blueimp.Gallery(links, options);
-};
-</script>
 <% include ../partials/footer %>
