@@ -41,10 +41,12 @@ var maxDate=new Date(Math.max.apply(null,tdates));
 //generate genMonths
 var genMonths = [];
 var date = new Date();
-var endDate = maxDate.setMonth(maxDate.getMonth()+1);
+var date = new Date(date.getFullYear(), date.getMonth(), 1);
+var endDate = maxDate.setMonth(maxDate.getMonth());
 var monthNameList = ["Jan", "Feb", "Mär", "Apr", "Mai", "Juni", "Juli", "Aug", "Sep", "Okt", "Nov", "Dez"];
-while (date <= endDate)
+while (date < endDate)
 {
+    console.log("date:" + moment(date).format('DD.MM.YYYY') + ", endDate: "+  moment(endDate).format('DD.MM.YYYY'));
     var headerstring = moment(date).format('MMMM') + " " + date.getFullYear();
     var compareDate =  monthNameList[date.getMonth()] + "_" + date.getFullYear();
     
@@ -53,6 +55,7 @@ while (date <= endDate)
         compareDate : compareDate
     });
     date.setMonth(date.getMonth() + 1);
+
 }
 %>
 <h1>Veranstaltungen in Planung</h1>
@@ -70,12 +73,11 @@ while (date <= endDate)
         <tbody>
             <% events.forEach(function(event){ %>
                 <% 
-                console.log("title: " + event.title + ", event.maxSubscribers: " + event.maxSubscribers + ", MaxSubscriber: " + MaxSubscriber );
                 MaxSubscriber = "unbegr.";   
                 if(event.maxSubscribers != null) {
                     MaxSubscriber = event.maxSubscribers;
                 }
-                console.log("MaxSubscriber: " + MaxSubscriber );
+            
                 if(moment(event.date).format('YYYY') == "1970") { %>
                     <tr>
                         <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
@@ -141,7 +143,7 @@ while (date <= endDate)
                         <tbody>
                             <% events.forEach(function(event){ %>
                                 <% 
-                                console.log("title: " + event.title + ", event.maxSubscribers: " + event.maxSubscribers);
+                               
                                 MaxSubscriber = "unbegr.";   
                                  if(event.maxSubscribers != null) {
                                     MaxSubscriber = event.maxSubscribers;
