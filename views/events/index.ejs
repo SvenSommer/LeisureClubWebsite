@@ -83,12 +83,12 @@ while (date < endDate)
                         <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
                         <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>
                         <td style="text-align: center"><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
-                        <td>
+                        <td><a href="/events/<%= event._id %>">
                              <% if(event.subscribers){%>
                                 <%= event.subscribers.length %> / <%= MaxSubscriber %>
                             <% } else { %>
                                 0 / <%= event.maxSubscribers %>
-                            <% } %>
+                            <% } %></a>
                         </td>    
                         <td>
                              <% var isSubscribed = false;
@@ -155,12 +155,12 @@ while (date < endDate)
                                         <td><a href="/events/<%= event._id %>"><%= moment(event.deadline).format('DD.MM.YYYY') %></a></td>
                                         <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>
                                         <td style="text-align: center"><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
-                                        <td>
+                                        <td><a href="/events/<%= event._id %>">
                                            <% if(event.subscribers){%>
                                                 <%= event.subscribers.length %> / <%= MaxSubscriber %>
                                             <% } else { %>
                                                 0 / <%= event.maxSubscribers %>
-                                            <% } %>
+                                            <% } %></a>
                                         </td>    
                                         <td>
                                              <% var isSubscribed = false;
