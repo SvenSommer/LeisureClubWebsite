@@ -24,6 +24,8 @@
     
 
 <%
+
+var MaxSubscriber = "unbegr.";     
 String.prototype.trunc = String.prototype.trunc ||
       function(n){
           return (this.length > n) ? this.substr(0, n-1) + "..." : this;
@@ -67,15 +69,24 @@ while (date <= endDate)
         </thead>
         <tbody>
             <% events.forEach(function(event){ %>
-                <% if(moment(event.date).format('YYYY') == "1970") { %>
+                <% 
+                console.log("title: " + event.title + ", event.maxSubscribers: " + event.maxSubscribers + ", MaxSubscriber: " + MaxSubscriber );
+                MaxSubscriber = "unbegr.";   
+                if(event.maxSubscribers != null) {
+                    MaxSubscriber = event.maxSubscribers;
+                }
+                console.log("MaxSubscriber: " + MaxSubscriber );
+                if(moment(event.date).format('YYYY') == "1970") { %>
                     <tr>
                         <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
                         <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>
                         <td style="text-align: center"><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
                         <td>
-                            <% event.subscribers.forEach(function(subscriber){ %>
-                                <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>
-                            <% }); %>
+                             <% if(event.subscribers){%>
+                                <%= event.subscribers.length %> / <%= MaxSubscriber %>
+                            <% } else { %>
+                                0 / <%= event.maxSubscribers %>
+                            <% } %>
                         </td>    
                         <td>
                              <% var isSubscribed = false;
@@ -129,7 +140,13 @@ while (date <= endDate)
                         </thead>
                         <tbody>
                             <% events.forEach(function(event){ %>
-                                <% if(moment(event.date).format('MMM_YYYY').replace('.', '') == month.compareDate && !moment().add(-1,'days').isAfter(moment(event.date))) { %>
+                                <% 
+                                console.log("title: " + event.title + ", event.maxSubscribers: " + event.maxSubscribers);
+                                MaxSubscriber = "unbegr.";   
+                                 if(event.maxSubscribers != null) {
+                                    MaxSubscriber = event.maxSubscribers;
+                                }
+                                if(moment(event.date).format('MMM_YYYY').replace('.', '') == month.compareDate && !moment().add(-1,'days').isAfter(moment(event.date))) { %>
                                     <tr>
                                         <td><a id="<%=event.id%>"></a><%= moment(event.date).format('DD.MM.YYYY dddd') %>,</br><%=event.time %> Uhr</td>
                                         <td style="text-align: left"><a href="/events/<%= event._id %>"><strong><%= event.title %></strong></a><br><%= event.description %></td>
@@ -137,9 +154,11 @@ while (date <= endDate)
                                         <td><a href="/events/<%= event._id %>"><%= event.fee %></a></td>
                                         <td style="text-align: center"><a href="/events/<%= event._id %>"><%= event.comments.length %></a></td>
                                         <td>
-                                            <% event.subscribers.forEach(function(subscriber){ %>
-                                                <a href="/users/<%= subscriber.id %>"><%=subscriber.username%></a><br>
-                                            <% }); %>
+                                           <% if(event.subscribers){%>
+                                                <%= event.subscribers.length %> / <%= MaxSubscriber %>
+                                            <% } else { %>
+                                                0 / <%= event.maxSubscribers %>
+                                            <% } %>
                                         </td>    
                                         <td>
                                              <% var isSubscribed = false;

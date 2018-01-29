@@ -1,10 +1,11 @@
 
 TODO Ideen 
-* event/index vergangene Veranstaltungen ansehen
+* Delete photos also from the event
 * user/show teilnehmende veranstaltungen des Benutzers
 ______________________________________________ 
 
 DONE
+* event/index vergangene Veranstaltungen ansehen
 * event/index Anzahl der Kommentare wird ebenfalls in der Übersicht aufgeführt
 * Platzhalter für ein Bild einer Veranstaltung wird nur noch angezeigt, wenn auch ein Bild hinterlegt wurde
 * Letzter Login Zeitpunkt wird den Administratoren in der Übersichtsseite der Mitglieder angezeigt.
