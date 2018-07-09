@@ -134,7 +134,7 @@ router.put("/:id",middleware.checkUserOwnership, upload.single('user[avatar]'), 
 
 
 //DELETE ROUTE
-router.delete("/:id",middleware.checkUserOwnership, function(req, res){
+router.delete("/:id",middleware.isAdmin, function(req, res){
      User.findByIdAndRemove(req.params.id, function(err){  
      if (err) {
             console.log(err);

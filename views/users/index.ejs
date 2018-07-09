@@ -49,6 +49,9 @@
                                 <a class="btn btn-xs btn-danger" href="/users/<%= user._id %>/toggle_active">sperren</a>
                             <% } else if( !user.isAdmin) {%>
                                 <a class="btn btn-xs btn-success" href="/users/<%= user._id %>/toggle_active">freischalten</a>
+                                <form class="delete-form" action="/users/<%= user._id %>/?_method=DELETE" method="POST">
+                                                <button class="btn btn-xs btn-danger">Mitglied löschen</button>
+                                            </form>
                             <% } else { %>
                                 Administrator
                             <% } %>
