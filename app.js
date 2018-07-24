@@ -23,7 +23,8 @@ var indexRoutes         = require("./routes/index"),
 
 
 // killall mongod ; cd ; ./mongod --repair ; cd data ; rm -rf mongod.lock ; cd ; ./mongod
-// . init.sh
+// . init.sh &  npm start
+// 
 if (!process.env.SITENAME) {
     console.log("SITENAME is not defined!");
 }  
@@ -56,7 +57,10 @@ if (!process.env.CLOUDINARY_API_SECRET) {
 
 //APP Config    
 var url = process.env.DATABASEURL || "mongodb://localhost/freizeitverein";
-mongoose.connect(url, {useMongoClient: true});
+mongoose.Promise = require('bluebird');
+mongoose.connect(url, {useNewUrlParser: true});
+
+//mongoose.set('debug', true);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());

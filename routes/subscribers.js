@@ -49,7 +49,6 @@ router.post("/", middleware.isLoggedIn, function(req,res){
                         subscriber.save();
                         foundevent.subscribers.push(subscriber);
                         foundevent.save();
-                        
                         req.flash("success", 'Du hast dich erfolgreich für die Veranstaltung "' + foundevent.title + '" angemeldet!');
                         res.redirect("back"); 
                       // res.redirect("/events#"+foundevent.id);   
